@@ -23,5 +23,7 @@ int  peek(char *str);
 
 int clearStack(void);
 
+int peekALL (int *x);
+
 #endif
 // eof 

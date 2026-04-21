@@ -38,14 +38,22 @@ int pop(int *val)
 }
 int  peek(int *val)
 {
-    int ablage;
     
     if(top < 0) return STACK_EMPTY;
-    pop(&ablage);
-    *val = ablage;
-    push(&ablage);
+    *val = stack[top];
     return WORKING;
 
+}
+int peekALL (int *x)
+{   
+    if(top < 0 ) return STACK_EMPTY;
+    int i = top;
+    
+    while(i != -1){
+        x[i]=stack[i];
+        i--;
+    }
+    return WORKING;
 }
 int clearStack (){
     if(top < 0 ) return STACK_EMPTY;

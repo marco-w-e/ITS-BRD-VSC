@@ -33,7 +33,7 @@ int main(void) {
 
   // Begruessungstext	
 	makeKeyPad();
-  
+  char str[20];
 	
 	// Test in Endlosschleife
 	while(1) {
@@ -43,19 +43,22 @@ int main(void) {
       break;
       case MINUS: minus();
       break; 
-      case MULT: mal();
+      case MULT:// mal();
       break;   
-      case DIV: geteilt();
+      case DIV: //geteilt();
       break;
       case PRT:printZeichen();
       break;
       case SWAP:
-      case PRT_ALL: 
+      break;
+      case PRT_ALL: printAlles();
+      break; 
       case DOUBLE:
-		  case CLEAR: clear();
+      break;
+		  case CLEAR:// clear();
       break;
       default: push(&input.val);
-                lcdPrintInt(input.val);
+                
    }
 	
 	}
