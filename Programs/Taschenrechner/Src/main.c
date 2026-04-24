@@ -39,7 +39,7 @@ int main(void) {
 	while(1) {
 	 T_token input = nextToken();
    switch (input.tok) {
-      case PLUS: plus();
+      case PLUS:refresh (plus());
       break;
       case MINUS: minus();
       break; 
@@ -49,11 +49,11 @@ int main(void) {
       break;
       case PRT:printZeichen();
       break;
-      case SWAP:
+      case SWAP: swap();
       break;
       case PRT_ALL: printAlles();
       break; 
-      case DOUBLE:
+      case DOUBLE: ;
       break;
 		  case CLEAR: clear();
       break;
