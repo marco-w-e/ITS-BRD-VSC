@@ -128,18 +128,7 @@ int geteilt(void) {
     {
         return ZERO_DIVISON;
     }
-  if (x == 0){
-    return ZERO_DIVISON;
-}
-  if () {
-    
-
-    return INT_OVERFLOW;
-  }
-
-  if () {
-    return INT_UNDERFLOW;
-  }
+ 
 
   int result = x / y;
   clearStdout();
