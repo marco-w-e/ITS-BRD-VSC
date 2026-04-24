@@ -92,14 +92,24 @@ int mal(void) {
   pop(&x);
   pop(&y);
 
-  if (y > (INT_MAX / x)) {
-    
+  //Wenn X Positiv ist
+  if (x > 0 && (y > (INT_MAX / x))) {
+    return INT_OVERFLOW;
+  }
+    if (x > 0 && (y < INT_MIN / x)) {
+        return INT_UNDERFLOW;
+    }
+
+
+  //Wenn X Negativ ist---
+    if (y < 0 && y < INT_MAX / x) {
     return INT_OVERFLOW;
   }
 
-    if (x > 0 && y < 0 && y < INT_MIN / x) {
+    if (y > 0 && y > INT_MIN / x) {
         return INT_UNDERFLOW;
     }
+
 
   int result = x * y;
   clearStdout();
@@ -114,14 +124,23 @@ int geteilt(void) {
   char str[20];
   pop(&x);
   pop(&y);
-  if (x < y)
+  if (x == 0 || y == 0)
     {
         return ZERO_DIVISON;
     }
   if (x == 0){
     return ZERO_DIVISON;
 }
- 
+  if () {
+    
+
+    return INT_OVERFLOW;
+  }
+
+  if () {
+    return INT_UNDERFLOW;
+  }
+
   int result = x / y;
   clearStdout();
   intToString(result, str);
