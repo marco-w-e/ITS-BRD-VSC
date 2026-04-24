@@ -195,7 +195,7 @@ project:
         - file: Src/Stack.c
         - file: Src/display.c
         - file: Src/scanner.c
-        - file: Fehler.c
+        - file: Src/Fehler.c
 
   components:
     - component: ARM::CMSIS:CORE
