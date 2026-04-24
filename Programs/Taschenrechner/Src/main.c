@@ -41,11 +41,11 @@ int main(void) {
    switch (input.tok) {
       case PLUS:refresh (plus());
       break;
-      case MINUS: minus();
+      case MINUS:refresh( minus());
       break; 
-      case MULT: mal();
+      case MULT:refresh( mal());
       break;   
-      case DIV: geteilt();
+      case DIV: refresh(geteilt());
       break;
       case PRT:printZeichen();
       break;

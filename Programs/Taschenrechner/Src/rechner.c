@@ -121,16 +121,7 @@ int geteilt(void) {
   if (x == 0){
     return ZERO_DIVISON;
 }
-  if () {
-    
-
-    return INT_OVERFLOW;
-  }
-
-  if () {
-    return INT_UNDERFLOW;
-  }
-
+ 
   int result = x / y;
   clearStdout();
   intToString(result, str);
@@ -160,6 +151,7 @@ int swap(void) {
 }
 
 int clear(void) {
+  setNormalMode();
   clearStack();
   clearStdout();
   return WORKING;
