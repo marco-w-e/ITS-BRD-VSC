@@ -11,9 +11,15 @@
 
 #define MAX_LENGHT_STR 20
 
-void intToString (int zahl,char *str){
+int intToString (int zahl,char *str){
     int vorzeichen = zahl; //vorzeichen merken für ausgabe
     int i =0;
+
+    if (zahl==0) {
+        str[i++] = '0';
+        str[i] = '\0';
+        return WORKING;
+    }
     if(zahl<0)zahl = -zahl; // mach positiv zahl = -zahl;
 
     while(zahl > 0){ // ein ziffer in char rein
@@ -29,8 +35,8 @@ void intToString (int zahl,char *str){
         char ablage = str[y];
         str[y] = str[x];
         str[x] = ablage;
-
     }
+    return WORKING;
 
 
 }

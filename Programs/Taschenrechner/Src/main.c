@@ -39,7 +39,7 @@ int main(void) {
 	while(1) {
 	 T_token input = nextToken();
    switch (input.tok) {
-      case PLUS: plus();
+      case PLUS:refresh (plus());
       break;
       case MINUS: minus();
       break; 

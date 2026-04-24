@@ -117,7 +117,7 @@
   "cmake.ignoreCMakeListsMissing": true,
   "C_Cpp_Runner.msvcBatchPath": "",
   "clangd.arguments": [
-    "--compile-commands-dir=c:\\Users\\marco\\ITS-BRD-VSC\\Programs\\Taschenrechner\\out\\Taschenrechner\\ITSboard\\Debug"
+    "--compile-commands-dir=c:\\Users\\Dylan\\Marco\\ITS-BRD-VSC\\Programs\\Taschenrechner\\out\\Taschenrechner\\ITSboard\\Debug"
   ],
   "debug.hideSlowPreLaunchWarning": true,
   "debug.showInStatusBar": "never",
