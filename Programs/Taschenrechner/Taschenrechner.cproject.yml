@@ -175,27 +175,27 @@ project:
         - file: ../../ITS_BRD_LIB/Src/timer.c
         - file: ../../ITS_BRD_LIB/Src/USART_STM32F4xx.c
         - file: ../../ITS_BRD_LIB/Src/stdinout_USART.c
-        - file: ../../../Downloads/scanner.c
-        - file: ../../../Downloads/display.c
 
     # Header-Dateien für das Programm
     - group: Program/User/Inc
       files:
-        - file: ../../ITS_BRD_LIB/Inc/lcd.h
-        - file: ../../../Downloads/token.h
-        - file: ../../../Downloads/scanner.h
-        - file: ../../../Downloads/display.h
-        - file: Stack.h
-        - file: Fehler.h
-        - file: rechner.h
+        - file: Inc/display.h
+        - file: Inc/Fehler.h
+        - file: Inc/main.h
+        - file: Inc/rechner.h
+        - file: Inc/scanner.h
+        - file: Inc/Stack.h
+        - file: Inc/token.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
       files:
         - file: Src/main.c
-        - file: Stack.c
+        - file: Src/rechner.c
+        - file: Src/Stack.c
         - file: Fehler.c
-        - file: rechner.c
+        - file: Src/display.c
+        - file: Src/scanner.c
 
   components:
     - component: ARM::CMSIS:CORE
