@@ -43,9 +43,9 @@ int main(void) {
       break;
       case MINUS: minus();
       break; 
-      case MULT:// mal();
+      case MULT: mal();
       break;   
-      case DIV: //geteilt();
+      case DIV: geteilt();
       break;
       case PRT:printZeichen();
       break;
@@ -55,7 +55,7 @@ int main(void) {
       break; 
       case DOUBLE:
       break;
-		  case CLEAR:// clear();
+		  case CLEAR: clear();
       break;
       default: push(&input.val);
                 

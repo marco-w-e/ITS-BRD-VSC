@@ -11,7 +11,7 @@
 
 #define MAX_LENGHT_STR 20
 
-char intToString (int zahl,char *str){
+void intToString (int zahl,char *str){
     int vorzeichen = zahl; //vorzeichen merken für ausgabe
     int i =0;
     if(zahl<0)zahl = -zahl; // mach positiv zahl = -zahl;
@@ -56,20 +56,26 @@ int plus(void){
 int minus (void){
     int x;
     int y;
+    char str [20];
      pop(&x);
      pop(&y);
      int result = x - y;
-    lcdPrintInt(result);
+    clearStdout();
+    intToString(result,str);
+     printStdout(str);
     push(&result);
     return WORKING;
 }
 int mal(void){
     int x;
     int y;
+     char str [20];
      pop(&x);
      pop(&y);
      int result = x * y;
-    lcdPrintInt(result);
+     clearStdout();
+    intToString(result,str);
+     printStdout(str);
     push(&result);
     return WORKING;
 
@@ -77,12 +83,15 @@ int mal(void){
 int geteilt(void){
     int x;
     int y;
+    char str [20];
      pop(&x);
      pop(&y);
      if(x < y) return ZERO_DIVISON;
      if (x == 0) return ZERO_DIVISON;
-     int result = x * y;
-    lcdPrintInt(result);
+     int result = x / y;
+     clearStdout();
+    intToString(result,str);
+     printStdout(str);
     push(&result);
     return WORKING;
 }
@@ -110,11 +119,12 @@ int swap(void){
  pop(&y);
  push(&x);
  push(&y);
-    
+ return WORKING;   
 }
 
 int clear(void){
  clearStack();
+ clearStdout();
  return WORKING;
 
 }
@@ -122,15 +132,16 @@ int clear(void){
 int printAlles(void){
     int numbers[20];
     char str[20];
-
+    clearStdout();
     peekALL (numbers);
-    for(int i =0;i<=20;i++){
+     int n = sizeof(numbers) / sizeof(numbers[0]); 
+    for(int i =0;i <= n;i++){
 
          intToString(numbers[i],str);
          printStdout(str);
         
     }
-   
+   return WORKING;
 
 }
 

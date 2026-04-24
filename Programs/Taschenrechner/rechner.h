@@ -20,7 +20,7 @@ int verdoppleTop(void);
 
 int clear(void);
 
-char intToString (int zahl,char *str);
+void intToString (int zahl,char *str);
 
 #endif
 // eof 

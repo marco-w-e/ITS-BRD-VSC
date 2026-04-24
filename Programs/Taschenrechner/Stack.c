@@ -53,6 +53,7 @@ int peekALL (int *x)
         x[i]=stack[i];
         i--;
     }
+   
     return WORKING;
 }
 int clearStack (){
@@ -62,6 +63,8 @@ int clearStack (){
     
     while (i != -1){
         pop(&x);
+        i--;
     }
     return WORKING;
 }
+

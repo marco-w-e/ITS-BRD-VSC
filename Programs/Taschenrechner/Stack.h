@@ -19,7 +19,7 @@ int push(int *val);
 
 int pop(int *val);
 
-int  peek(char *str);
+int  peek(int *val);
 
 int clearStack(void);
 
