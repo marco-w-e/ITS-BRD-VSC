@@ -193,9 +193,9 @@ project:
         - file: Src/main.c
         - file: Src/rechner.c
         - file: Src/Stack.c
-        - file: Fehler.c
         - file: Src/display.c
         - file: Src/scanner.c
+        - file: Fehler.c
 
   components:
     - component: ARM::CMSIS:CORE

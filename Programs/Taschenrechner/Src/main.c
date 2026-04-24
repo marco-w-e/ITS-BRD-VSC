@@ -49,11 +49,11 @@ int main(void) {
       break;
       case PRT:printZeichen();
       break;
-      case SWAP:
+      case SWAP: swap();
       break;
       case PRT_ALL: printAlles();
       break; 
-      case DOUBLE:
+      case DOUBLE: ;
       break;
 		  case CLEAR: clear();
       break;
