@@ -44,11 +44,11 @@ int  peek(int *val)
     return WORKING;
 
 }
-int peekALL (int *x)
-{   
+int peekALL (int *x,int *t)
+{    int i = top;
     if(top < 0 ) return STACK_EMPTY;
-    int i = top;
-    
+   
+    *t = top+1;
     while(i != -1){
         x[i]=stack[i];
         i--;

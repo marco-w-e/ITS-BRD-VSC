@@ -192,16 +192,20 @@ int clear(void) {
 
 int printAlles(void) {
   int numbers[20];
-  char str[20];               //!!!!!! muss noch gemacht werde nicht vergessen !!!! 
-  clearStdout();
-  peekALL(numbers);
-  int n = sizeof(numbers) / sizeof(numbers[0]);
-  for (int i = 0; i <= n; i++) {
+    char str[20];
+  int top ;
+    clearStdout();
 
-    intToString(numbers[i], str);
-    printStdout(str);
-  }
-  return WORKING;
+    int err1 = peekALL(numbers,&top);
+    if (err1 < 0) return err1; 
+
+    for (int i = 0; i < top; i++) {
+        intToString(numbers[i], str);
+        printStdout(str);
+        printStdout(" "); // optional für Abstand
+    }
+
+    return WORKING;
 }
 int verdoppleTop(void){
   int x;
