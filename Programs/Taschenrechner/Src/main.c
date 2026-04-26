@@ -55,7 +55,7 @@ int main(void) {
       break; 
       case DOUBLE: verdoppleTop() ;
       break;
-		  case CLEAR: clear();
+		  case CLEAR: refresh(clear());
       break;
       case NUMBER: refresh(push(&input.val));
       break;
