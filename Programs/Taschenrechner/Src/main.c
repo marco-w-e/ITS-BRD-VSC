@@ -47,17 +47,18 @@ int main(void) {
       break;   
       case DIV: refresh(geteilt());
       break;
-      case PRT:printZeichen();
+      case PRT:refresh(printZeichen());
       break;
       case SWAP: swap();
       break;
-      case PRT_ALL: printAlles();
+      case PRT_ALL: refresh(printAlles());
       break; 
       case DOUBLE: verdoppleTop() ;
       break;
 		  case CLEAR: clear();
       break;
-      default: refresh(push(&input.val));
+      case NUMBER: refresh(push(&input.val));
+      break;
                 
    }
 	

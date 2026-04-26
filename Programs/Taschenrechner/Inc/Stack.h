@@ -25,5 +25,7 @@ int clearStack(void);
 
 int peekALL (int *x);
 
+int getTop(int *x);
+
 #endif
 // eof 

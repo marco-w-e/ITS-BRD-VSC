@@ -43,11 +43,14 @@ int plus(void) {
   int x;
   int y;
   char str[20];
-
-  refresh(pop(&x));
-  pop(&y);
-
-  if (x > 0 && y > INT_MAX - x) {
+  
+ int err1 = pop(&x);            // das was du da siehst ist für die fehler weiter gaben nennt man guard clause oder so idk :)
+ if(err1 != 0) return err1;     // hab das jetzt eigentlich jetzt bei jedem stack methoden aufruf gemacht
+ 
+  int err2 = pop(&y);
+ if(err1 != 0) return err2;
+  
+ if (x > 0 && y > INT_MAX - x) {
     return INT_OVERFLOW;
   }
 
@@ -59,7 +62,7 @@ int plus(void) {
   clearStdout();
   intToString(result, str);
   printStdout(str);
-  refresh(push(&result));
+  push(&result);
   return WORKING;
 }
 int minus(void) {
@@ -67,8 +70,11 @@ int minus(void) {
   int y;
   char str[20];
 
-  refresh(pop(&x));
-  pop(&y);
+  int err1 = pop(&x);
+ if(err1 != 0) return err1;
+ 
+  int err2 = pop(&y);
+ if(err1 != 0) return err2;
 
   if (y > 0 && x < INT_MIN + y) {
     return INT_UNDERFLOW;
@@ -82,15 +88,19 @@ int minus(void) {
   clearStdout();
   intToString(result, str);
   printStdout(str);
- refresh(push(&result));
+  refresh(push(&result));
   return WORKING;
 }
 int mal(void) {
   int x;
   int y;
   char str[20];
-  refresh(pop(&x));
-  pop(&y);
+ 
+  int err1 = pop(&x);
+ if(err1 != 0) return err1;
+ 
+  int err2 = pop(&y);
+ if(err1 != 0) return err2;
 
   //Wenn X Positiv ist
   if (x > 0 && (y > (INT_MAX / x))) {
@@ -122,8 +132,13 @@ int geteilt(void) {
   int x;
   int y;
   char str[20];
-  refresh(pop(&x));
-  pop(&y);
+ 
+  int err1 = pop(&x);
+  if(err1 != 0) return err1;
+ 
+  int err2 = pop(&y);
+  if(err1 != 0) return err2;
+  
   if (x == 0 || y == 0)
     {
         return ZERO_DIVISON;
@@ -142,7 +157,10 @@ int printZeichen(void) {
   
   int number;
   char str[20];
-  refresh(peek(&number));
+  
+ int err1 = peek(&number);
+ if(err1 != 0) return err1;
+
   clearStdout();
   intToString(number, str);
   printStdout(str);
@@ -153,23 +171,28 @@ int swap(void) {
 
   int x;
   int y;
-  refresh(pop(&x));
-  pop(&y);
-  refresh(push(&x));
+  int err1 = pop(&x);
+  if(err1 != 0) return err1;
+ 
+  int err2 = pop(&y);
+ if(err1 != 0) return err2;
+  
+  push(&x);
   push(&y);
   return WORKING;
 }
 
 int clear(void) {
   setNormalMode();
-  clearStack();
+  int err1 = clearStack();
+  if(err1 != 0) return err1;
   clearStdout();
   return WORKING;
 }
 
 int printAlles(void) {
   int numbers[20];
-  char str[20];
+  char str[20];               //!!!!!! muss noch gemacht werde nicht vergessen !!!! 
   clearStdout();
   peekALL(numbers);
   int n = sizeof(numbers) / sizeof(numbers[0]);
@@ -182,7 +205,8 @@ int printAlles(void) {
 }
 int verdoppleTop(void){
   int x;
-  refresh(peek(&x));
-  refresh(push(&x));
+  int err1 = peek(&x);
+  if(err1 != 0) return err1;
+  push(&x);
   return WORKING;
 }
