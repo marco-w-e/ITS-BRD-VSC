@@ -33,8 +33,7 @@ int main(void) {
 
   // Begruessungstext	
 	makeKeyPad();
-  char str[20];
-	
+
 	// Test in Endlosschleife
 	while(1) {
 	 T_token input = nextToken();
@@ -49,11 +48,11 @@ int main(void) {
       break;
       case PRT:refresh(printZeichen());
       break;
-      case SWAP: swap();
+      case SWAP: refresh(swap());
       break;
       case PRT_ALL: refresh(printAlles());
       break; 
-      case DOUBLE: verdoppleTop() ;
+      case DOUBLE: refresh(verdoppleTop() );
       break;
 		  case CLEAR: clear();
       break;

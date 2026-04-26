@@ -43,14 +43,18 @@ int plus(void) {
   int x;
   int y;
   char str[20];
-  
- int err1 = pop(&x);            // das was du da siehst ist für die fehler weiter gaben nennt man guard clause oder so idk :)
- if(err1 != 0) return err1;     // hab das jetzt eigentlich jetzt bei jedem stack methoden aufruf gemacht
- 
+
+  int err1 = pop(&x); // das was du da siehst ist für die fehler weiter gaben
+                      // nennt man guard clause oder so idk :)
+  if (err1 != 0)
+    return err1; // hab das jetzt eigentlich jetzt bei jedem stack methoden
+                 // aufruf gemacht
+
   int err2 = pop(&y);
- if(err1 != 0) return err2;
-  
- if (x > 0 && y > INT_MAX - x) {
+  if (err1 != 0)
+    return err2;
+
+  if (x > 0 && y > INT_MAX - x) {
     return INT_OVERFLOW;
   }
 
@@ -71,10 +75,12 @@ int minus(void) {
   char str[20];
 
   int err1 = pop(&x);
- if(err1 != 0) return err1;
- 
+  if (err1 != 0)
+    return err1;
+
   int err2 = pop(&y);
- if(err1 != 0) return err2;
+  if (err1 != 0)
+    return err2;
 
   if (y > 0 && x < INT_MIN + y) {
     return INT_UNDERFLOW;
@@ -95,31 +101,31 @@ int mal(void) {
   int x;
   int y;
   char str[20];
- 
-  int err1 = pop(&x);
- if(err1 != 0) return err1;
- 
-  int err2 = pop(&y);
- if(err1 != 0) return err2;
 
-  //Wenn X Positiv ist
+  int err1 = pop(&x);
+  if (err1 != 0)
+    return err1;
+
+  int err2 = pop(&y);
+  if (err1 != 0)
+    return err2;
+
+  // Wenn X Positiv ist
   if (x > 0 && (y > (INT_MAX / x))) {
     return INT_OVERFLOW;
   }
-    if (x > 0 && (y < INT_MIN / x)) {
-        return INT_UNDERFLOW;
-    }
+  if (x > 0 && (y < INT_MIN / x)) {
+    return INT_UNDERFLOW;
+  }
 
-
-  //Wenn X Negativ ist---
-    if (y < 0 && y < INT_MAX / x) {
+  // Wenn X Negativ ist---
+  if (y < 0 && y < INT_MAX / x) {
     return INT_OVERFLOW;
   }
 
-    if (y > 0 && y > INT_MIN / x) {
-        return INT_UNDERFLOW;
-    }
-
+  if (y > 0 && y > INT_MIN / x) {
+    return INT_UNDERFLOW;
+  }
 
   int result = x * y;
   clearStdout();
@@ -128,24 +134,25 @@ int mal(void) {
   refresh(push(&result));
   return WORKING;
 }
+
 int geteilt(void) {
   int x;
   int y;
   char str[20];
- 
-  int err1 = pop(&x);
-  if(err1 != 0) return err1;
- 
-  int err2 = pop(&y);
-  if(err1 != 0) return err2;
-  
-  if (x == 0 || y == 0)
-    {
-        return ZERO_DIVISON;
-    }
- 
 
-  int result = x / y;
+  int err1 = pop(&x);
+  if (err1 != 0)
+    return err1;
+
+  int err2 = pop(&y);
+  if (err1 != 0)
+    return err2;
+
+  if (x == 0 || y == 0) {
+    return ZERO_DIVISON;
+  }
+
+  int result = y / x;
   clearStdout();
   intToString(result, str);
   printStdout(str);
@@ -154,12 +161,13 @@ int geteilt(void) {
 }
 
 int printZeichen(void) {
-  
+
   int number;
   char str[20];
-  
- int err1 = peek(&number);
- if(err1 != 0) return err1;
+
+  int err1 = peek(&number);
+  if (err1 != 0)
+    return err1;
 
   clearStdout();
   intToString(number, str);
@@ -172,11 +180,13 @@ int swap(void) {
   int x;
   int y;
   int err1 = pop(&x);
-  if(err1 != 0) return err1;
- 
+  if (err1 != 0)
+    return err1;
+
   int err2 = pop(&y);
- if(err1 != 0) return err2;
-  
+  if (err1 != 0)
+    return err2;
+
   push(&x);
   push(&y);
   return WORKING;
@@ -185,32 +195,35 @@ int swap(void) {
 int clear(void) {
   setNormalMode();
   int err1 = clearStack();
-  if(err1 != 0) return err1;
+  if (err1 != 0)
+    return err1;
   clearStdout();
   return WORKING;
 }
 
 int printAlles(void) {
   int numbers[20];
-    char str[20];
-  int top ;
-    clearStdout();
+  char str[20];
+  int top;
+  clearStdout();
 
-    int err1 = peekALL(numbers,&top);
-    if (err1 < 0) return err1; 
+  int err1 = peekALL(numbers, &top);
+  if (err1 < 0)
+    return err1;
 
-    for (int i = 0; i < top; i++) {
-        intToString(numbers[i], str);
-        printStdout(str);
-        printStdout(" "); // optional für Abstand
-    }
+  for (int i = 0; i < top; i++) {
+    intToString(numbers[i], str);
+    printStdout(str);
+    printStdout(" "); // optional für Abstand
+  }
 
-    return WORKING;
+  return WORKING;
 }
-int verdoppleTop(void){
+int verdoppleTop(void) {
   int x;
   int err1 = peek(&x);
-  if(err1 != 0) return err1;
+  if (err1 != 0)
+    return err1;
   push(&x);
   return WORKING;
 }

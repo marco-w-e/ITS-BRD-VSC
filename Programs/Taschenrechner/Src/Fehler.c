@@ -30,14 +30,9 @@ void refresh(int errorCode){
                  errorLoop();
                            
         break;
-        case STACK_UNDERFLOW :
-                setErrMode();   
-                printStdout("STACK_UNDERFLOW") ;
-                 errorLoop();
-        break;
         case STACK_EMPTY :
                 setErrMode();  
-                printStdout("STACK_EMPTY") ;
+                printStdout("STACK_EMPTY press Clear") ;
                  errorLoop();
         break;
         case INT_OVERFLOW :
