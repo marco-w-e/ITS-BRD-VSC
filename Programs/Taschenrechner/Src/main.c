@@ -53,11 +53,11 @@ int main(void) {
       break;
       case PRT_ALL: printAlles();
       break; 
-      case DOUBLE: ;
+      case DOUBLE: verdoppleTop() ;
       break;
 		  case CLEAR: clear();
       break;
-      default: push(&input.val);
+      default: refresh(push(&input.val));
                 
    }
 	

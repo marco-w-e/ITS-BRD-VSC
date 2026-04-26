@@ -44,7 +44,7 @@ int plus(void) {
   int y;
   char str[20];
 
-  pop(&x);
+  refresh(pop(&x));
   pop(&y);
 
   if (x > 0 && y > INT_MAX - x) {
@@ -59,7 +59,7 @@ int plus(void) {
   clearStdout();
   intToString(result, str);
   printStdout(str);
-  push(&result);
+  refresh(push(&result));
   return WORKING;
 }
 int minus(void) {
@@ -67,7 +67,7 @@ int minus(void) {
   int y;
   char str[20];
 
-  pop(&x);
+  refresh(pop(&x));
   pop(&y);
 
   if (y > 0 && x < INT_MIN + y) {
@@ -82,14 +82,14 @@ int minus(void) {
   clearStdout();
   intToString(result, str);
   printStdout(str);
-  push(&result);
+ refresh(push(&result));
   return WORKING;
 }
 int mal(void) {
   int x;
   int y;
   char str[20];
-  pop(&x);
+  refresh(pop(&x));
   pop(&y);
 
   //Wenn X Positiv ist
@@ -115,14 +115,14 @@ int mal(void) {
   clearStdout();
   intToString(result, str);
   printStdout(str);
-  push(&result);
+  refresh(push(&result));
   return WORKING;
 }
 int geteilt(void) {
   int x;
   int y;
   char str[20];
-  pop(&x);
+  refresh(pop(&x));
   pop(&y);
   if (x == 0 || y == 0)
     {
@@ -134,14 +134,15 @@ int geteilt(void) {
   clearStdout();
   intToString(result, str);
   printStdout(str);
-  push(&result);
+  refresh(push(&result));
   return WORKING;
 }
 
 int printZeichen(void) {
+  
   int number;
   char str[20];
-  peek(&number);
+  refresh(peek(&number));
   clearStdout();
   intToString(number, str);
   printStdout(str);
@@ -149,11 +150,12 @@ int printZeichen(void) {
 }
 
 int swap(void) {
+
   int x;
   int y;
-  pop(&x);
+  refresh(pop(&x));
   pop(&y);
-  push(&x);
+  refresh(push(&x));
   push(&y);
   return WORKING;
 }
@@ -176,5 +178,11 @@ int printAlles(void) {
     intToString(numbers[i], str);
     printStdout(str);
   }
+  return WORKING;
+}
+int verdoppleTop(void){
+  int x;
+  refresh(peek(&x));
+  refresh(push(&x));
   return WORKING;
 }
