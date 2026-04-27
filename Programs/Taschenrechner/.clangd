@@ -1,6 +1,6 @@
 CompileFlags:
   CompilationDatabase: >-
-    c:\Users\Dylan\Marco\ITS-BRD-VSC\Programs\Taschenrechner\out\Taschenrechner\ITSboard\Debug
+    c:\Users\marco\ITS-BRD-VSC\Programs\Taschenrechner\out\Taschenrechner\ITSboard\Debug
   Add:
     - "-D_ILP32=1\r\n"
     - "-D_USE_STATIC_INLINE=1\r\n"
@@ -413,27 +413,25 @@ CompileFlags:
     - "-D__thumb__=1\r\n"
     - '-D__ARMCOMPILER_LIBCXX=1'
     - >-
-      -IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+      -IC:/Users/marco/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/CMSIS/Device/ST/STM32F4xx/Include
     - >-
-      -IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/CMSIS/Include
+      -IC:/Users/marco/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/CMSIS/Include
     - >-
-      -IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/STM32F4xx_HAL_Driver/Inc
+      -IC:/Users/marco/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/STM32F4xx_HAL_Driver/Inc
     - >-
-      -IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/BSP/STM32F4xx_Nucleo_144
+      -IC:/Users/marco/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Drivers/BSP/STM32F4xx_Nucleo_144
     - >-
-      -IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Utilities/Fonts
+      -IC:/Users/marco/ITS-BRD-VSC/Programs/Taschenrechner/../../stm32cubef4/Utilities/Fonts
     - >-
-      -IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Taschenrechner/../../DisplayWaveshare/Inc
+      -IC:/Users/marco/ITS-BRD-VSC/Programs/Taschenrechner/../../DisplayWaveshare/Inc
+    - '-IC:/Users/marco/ITS-BRD-VSC/Programs/Taschenrechner/../../ITS_BRD_LIB/Inc'
     - >-
-      -IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Taschenrechner/../../ITS_BRD_LIB/Inc
+      -IC:/Users/marco/ITS-BRD-VSC/Programs/Taschenrechner/../../ITS_BRD_LIB/Utilities/AddFonts
     - >-
-      -IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Taschenrechner/../../ITS_BRD_LIB/Utilities/AddFonts
+      -IC:/Users/marco/ITS-BRD-VSC/Programs/Taschenrechner/tmp/Taschenrechner.Debug+ITSboard
+    - '-IC:/Users/marco/ITS-BRD-VSC/Programs/Taschenrechner/RTE/_Debug_ITSboard'
     - >-
-      -IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Taschenrechner/tmp/Taschenrechner.Debug+ITSboard
+      -IC:/Users/marco/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include
     - >-
-      -IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Taschenrechner/RTE/_Debug_ITSboard
-    - >-
-      -IC:/Users/Dylan/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include
-    - >-
-      -IC:/Users/Dylan/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-    - '-IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Taschenrechner/Inc'
+      -IC:/Users/marco/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+    - '-IC:/Users/marco/ITS-BRD-VSC/Programs/Taschenrechner/Inc'

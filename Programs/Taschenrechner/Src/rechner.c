@@ -119,8 +119,8 @@ int mal(void) {
   }
 
   // Wenn X Negativ ist---
-  if (y < 0 && y < INT_MAX / x) {
-    return INT_OVERFLOW;
+  if (y < 0 && y < INT_MAX / x) {      // nochmal schnell anschauen vor dem labor
+    return INT_OVERFLOW; // ?????? macht das sinn 
   }
 
   if (y > 0 && y > INT_MIN / x) {
