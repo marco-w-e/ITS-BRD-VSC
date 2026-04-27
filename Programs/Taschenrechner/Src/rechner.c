@@ -51,7 +51,7 @@ int plus(void) {
                  // aufruf gemacht
 
   int err2 = pop(&y);
-  if (err1 != 0)
+  if (err2 != 0)
     return err2;
 
   if (x > 0 && y > INT_MAX - x) {
@@ -79,7 +79,7 @@ int minus(void) {
     return err1;
 
   int err2 = pop(&y);
-  if (err1 != 0)
+  if (err2 != 0)
     return err2;
 
   if (y > 0 && x < INT_MIN + y) {
@@ -107,7 +107,7 @@ int mal(void) {
     return err1;
 
   int err2 = pop(&y);
-  if (err1 != 0)
+  if (err2 != 0)
     return err2;
 
   // Wenn X Positiv ist
@@ -145,10 +145,10 @@ int geteilt(void) {
     return err1;
 
   int err2 = pop(&y);
-  if (err1 != 0)
+  if (err2 != 0)
     return err2;
 
-  if (x == 0 || y == 0) {
+  if (x == 0) {
     return ZERO_DIVISON;
   }
 
@@ -184,7 +184,7 @@ int swap(void) {
     return err1;
 
   int err2 = pop(&y);
-  if (err1 != 0)
+  if (err2 != 0)
     return err2;
 
   push(&x);
