@@ -1,0 +1,5 @@
+{
+    "clangd.arguments": [
+        "--compile-commands-dir=c:\\Users\\Dylan\\Marco\\ITS-BRD-VSC\\Programs\\Drehgebers\\out\\Drehgebers\\ITSboard\\Debug"
+    ]
+}
