@@ -1,0 +1,41 @@
+Module: 
+
+Main
+
+Input
+
+    Methode 1: Erfasst die Input-Phasen und wandelt diese in einen 2-stelligen Binärwert um.
+
+    Methode 2: Liest Taste S6 ein und gibt einen Boolean-Wert zurück.
+
+Output
+
+    Methode: LED 23 – Vorwärtsrichtung
+
+    Methode: LED 22 – Rückwärtsrichtung
+
+    Methode: LED 21 – Fehlerfall (Zurücksetzen durch Löschen des Fehlers via Taste S6)
+
+    Methode: LED 8 bis 15 – Ausgabe der Anzahl der Phasenwechsel in Binärform
+
+Modul: Display Output
+
+    Library: Timer.h
+
+    Methode: Drehwinkel in Grad anzeigen
+
+    Methode: Drehgeschwindigkeit in Grad pro Sekunde anzeigen
+
+Modul: Rechner
+
+    Methode: Drehwinkel berechnen (Berechnung der Gradzahl der Drehung)
+
+    Methode: Drehgeschwindigkeit in Grad pro Sekunde berechnen
+
+    Methode: Drehrichtung bestimmen
+
+Header: Fehlerbehandlung
+
+    Status: Working (Normalbetrieb)
+
+    Fehler: Phase übersprungen
