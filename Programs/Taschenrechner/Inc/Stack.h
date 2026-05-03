@@ -23,7 +23,7 @@ int  peek(int *val);
 
 int clearStack(void);
 
-int peekALL (int *x , int *t);
+
 
 int getTop(int *x);
 

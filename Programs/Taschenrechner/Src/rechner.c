@@ -51,7 +51,7 @@ int plus(void) {
                  // aufruf gemacht
 
   int err2 = pop(&y);
-  if (err1 != 0)
+  if (err2 != 0)
     return err2;
 
   if (x > 0 && y > INT_MAX - x) {
@@ -79,7 +79,7 @@ int minus(void) {
     return err1;
 
   int err2 = pop(&y);
-  if (err1 != 0)
+  if (err2 != 0)
     return err2;
 
   if (y > 0 && x < INT_MIN + y) {
@@ -107,25 +107,19 @@ int mal(void) {
     return err1;
 
   int err2 = pop(&y);
-  if (err1 != 0)
+  if (err2 != 0)
     return err2;
 
   // Wenn X Positiv ist
-  if (x > 0 && (y > (INT_MAX / x))) {
-    return INT_OVERFLOW;
-  }
-  if (x > 0 && (y < INT_MIN / x)) {
-    return INT_UNDERFLOW;
-  }
+ if (x > 0) {
+    if (y > INT_MAX / x) return INT_OVERFLOW;
+    if (y < INT_MIN / x) return INT_UNDERFLOW;
+}
 
-  // Wenn X Negativ ist---
-  if (y < 0 && y < INT_MAX / x) {      // nochmal schnell anschauen vor dem labor
-    return INT_OVERFLOW; // ?????? macht das sinn 
-  }
-
-  if (y > 0 && y > INT_MIN / x) {
-    return INT_UNDERFLOW;
-  }
+if (x < 0) {
+    if (y > 0 && y > INT_MIN / x) return INT_OVERFLOW;
+    if (y < 0 && y < INT_MAX / x) return INT_UNDERFLOW;
+}
 
   int result = x * y;
   clearStdout();
@@ -145,10 +139,10 @@ int geteilt(void) {
     return err1;
 
   int err2 = pop(&y);
-  if (err1 != 0)
+  if (err2 != 0)
     return err2;
 
-  if (x == 0 || y == 0) {
+  if (x == 0) {
     return ZERO_DIVISON;
   }
 
@@ -184,7 +178,7 @@ int swap(void) {
     return err1;
 
   int err2 = pop(&y);
-  if (err1 != 0)
+  if (err2 != 0)
     return err2;
 
   push(&x);
@@ -200,18 +194,24 @@ int clear(void) {
   clearStdout();
   return WORKING;
 }
-
+int peekALL(int *numbers,int *size){
+  int val;
+  int i;
+  while(pop(&val)== WORKING){
+      numbers[i] = val;
+      i++ ;
+  }
+  *size = i;
+}
 int printAlles(void) {
   int numbers[20];
   char str[20];
-  int top;
+  int size;
   clearStdout();
 
-  int err1 = peekALL(numbers, &top);
-  if (err1 < 0)
-    return err1;
-
-  for (int i = 0; i < top; i++) {
+  peekALL(numbers,&size);
+  
+  for (int i = 0; i < size; i++) {
     intToString(numbers[i], str);
     printStdout(str);
     printStdout(" "); // optional für Abstand
@@ -227,3 +227,5 @@ int verdoppleTop(void) {
   push(&x);
   return WORKING;
 }
+
+

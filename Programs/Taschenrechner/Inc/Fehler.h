@@ -9,5 +9,7 @@
 #define ZERO_DIVISON -5
 
 void refresh(int errorCode);
+
+void errorLoop(void);
 #endif
 //EOF
