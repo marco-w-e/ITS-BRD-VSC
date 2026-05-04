@@ -17,27 +17,27 @@
 #include "error.h"
 #include "stm32f4xx_hal.h"
 #include <stdbool.h>
+#include "input.h"
+#include "display.h"
 
 
-
-
-#define IDR_MASK_PIN_5        (0x01U << 5)
 
 
 
 int main(void) {
-	initITSboard();    // Initialisierung des ITS Boards
-	
-	GUI_init(DEFAULT_BRIGHTNESS);   // Initialisierung des LCD Boards mit Touch
-	TP_Init(false);                 // Initialisierung des LCD Boards mit Touch
-	
-char gpiofPin5Pressed = (IDR_MASK_PIN_5 != (GPIOF->IDR & IDR_MASK_PIN_5));
-  // Begruessungstext	
-	lcdPrintlnS("Hallo liebes TI-Labor (c-project)");
-	
+	initITSboard(); 
+	GUI_init(DEFAULT_BRIGHTNESS);
+	TP_Init(false);
+	int phase;
+	int oldPhase =0;
+
+	   // Initialisierung des ITS Boards      // Initialisierung des LCD Boards mit Touch
 	// Test in Endlosschleife
 	while(1) {
-		HAL_Delay(10000);
+		phase =gpioAusLesen();
+		LCDprintint(phase);
+		oldPhase = phase;
+		
 	}
 }
 
