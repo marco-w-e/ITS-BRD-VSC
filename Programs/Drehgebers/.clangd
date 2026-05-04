@@ -1,6 +1,7 @@
 CompileFlags:
   CompilationDatabase: c:\Users\marco\ITS-BRD-VSC\Programs\Drehgebers\out\Drehgebers\ITSboard\Debug
   Add:
+<<<<<<< HEAD
     - "-D_ILP32=1\r\n"
     - "-D_USE_STATIC_INLINE=1\r\n"
     - "-D__APCS_32__=1\r\n"
@@ -411,6 +412,9 @@ CompileFlags:
     - "-D__thumb2__=1\r\n"
     - "-D__thumb__=1\r\n"
     - '-D__ARMCOMPILER_LIBCXX=1'
+=======
+    - '-IC:/Users/Dylan/Marco/ITS-BRD-VSC/Programs/Drehgebers/Inc'
+>>>>>>> 8cc0e88576f887105e11da1653c85052b1a58dfc
     - >-
       -IC:/Users/marco/ITS-BRD-VSC/Programs/Drehgebers/../../stm32cubef4/Drivers/CMSIS/Device/ST/STM32F4xx/Include
     - >-

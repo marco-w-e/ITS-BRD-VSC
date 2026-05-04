@@ -1,8 +1,10 @@
 /**
   ******************************************************************************
+  * @note    Aufgabe 2 - Drehgeber
   * @file    main.c
-  * @author  Franz Korf
-  * @brief   Kleines Testprogramm fuer neu erstelle Fonts.
+  * @author  Dylan Dagomber 2815132, Marco Weidner
+  * @date    03.05.2026
+  * @brief   
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
