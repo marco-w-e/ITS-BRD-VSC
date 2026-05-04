@@ -1,26 +1,3 @@
-<<<<<<< HEAD
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal.h"
-#include <stdbool.h>
-#include "input.h"
-typedef enum {
-    IDEL,
-    FORWARD,
-    BACKWARD,
-    ERRO,
-}Direction;
-
-static const Direction  matrix[4][4]{
-{IDEL,BACKWARD,FORWARD,ERRO}
-{FORWARD,IDLE,ERRO,BACKWARD}
-{BACKWARD,ERRO,IDLE,FORWARD}
-{ERRO,FORWARD,BACKWARD,IDLE}
-}
-
-getDirection(oldPhase,Phase){
-    
-}
-=======
 /**
   ******************************************************************************
   * @note    Aufgabe 2 - Drehgeber
@@ -31,4 +8,28 @@ getDirection(oldPhase,Phase){
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
->>>>>>> 8cc0e88576f887105e11da1653c85052b1a58dfc
+
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
+#include <stdbool.h>
+#include "input.h"
+typedef enum {
+    IDEL,
+    FORWARD,
+    BACKWARD,
+    ERRO,
+}Direction;
+char const* directionName[] = {"IDEL","FORWARD","BACKWARD","ERRO"}
+
+static const Direction  matrix[4][4]{
+{IDEL,BACKWARD,FORWARD,ERRO}
+{FORWARD,IDLE,ERRO,BACKWARD}
+{BACKWARD,ERRO,IDLE,FORWARD}
+{ERRO,FORWARD,BACKWARD,IDLE}
+}
+
+int getDirection(int oldPhase,int Phase,Direction *currentDirection){
+    
+  *currentDirection = matrix[oldPhase][Phase];
+  return 1;
+}

@@ -21,7 +21,7 @@
 #include <stdbool.h>
 #include "input.h"
 #include "display.h"
-
+#include "rechner.h"
 
 
 
@@ -32,14 +32,15 @@ int main(void) {
 	TP_Init(false);
 	int phase;
 	int oldPhase =0;
-
+	 Direction currentDirection;
 	   // Initialisierung des ITS Boards      // Initialisierung des LCD Boards mit Touch
 	// Test in Endlosschleife
 	while(1) {
 		phase =gpioAusLesen();
 		LCDprintint(phase);
+		getDirection(oldPhase,phase,&currentDirection)
 		oldPhase = phase;
-		
+		lcdPrintS(directionName[currentDirection]);
 	}
 }
 
