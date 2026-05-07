@@ -4,7 +4,7 @@
   * @file    rechner.h
   * @author  Dylan Dagomber 2815132, Marco Weidner
   * @date    03.05.2026
-  * @brief   
+  * @brief   Berechnung von Winkel und Winkelgeschwindigkeit
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/

@@ -36,7 +36,7 @@ int main(void) {
 	// Test in Endlosschleife
 	while(1) {
 		phase =gpioAusLesen();
-		LCDprintint(phase);
+		lcdPrintInt(phase);
 		getDirection(oldPhase,phase,&currentDirection);
 		oldPhase = phase;
 		lcdPrintS(directionName[currentDirection]);
