@@ -21,6 +21,7 @@
 #include "input.h"
 #include "display.h"
 #include "rechner.h"
+#include "fsm.h"
 
 
 

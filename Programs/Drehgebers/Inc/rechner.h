@@ -11,18 +11,9 @@
 #ifndef RECHNER_H
 #define RECHNER_H
 //
-typedef enum {
-    IDLE,
-    FORWARD,
-    BACKWARD,
-    PROBLEM // Muss ERROR unbennen weil stm32f4xx.h schon ERROR definiert hat.
-} Direction;
+int calculateDrehwinkel(int phase);
 
-int getDirection(int oldPhase,int Phase,Direction *currentDirection);
-
-extern char const* directionName[];
-
-int getDirection(int oldPhase, int Phase, Direction *currentDirection);
+int calculateDrehgeschwindigkeit(int oldPhase, int newPhase, int timeInterval);
 
 #endif
 //EOF

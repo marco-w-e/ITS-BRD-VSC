@@ -11,6 +11,9 @@
 #ifndef DISPLAY_OUTPUT_H
 #define DISPLAY_OUTPUT_H
 //
+int intToString(int zahl);
+int displayDrehwinkel(int drehwinkel);
+int displayDrehgeschwindigkeit(int drehgeschwindigkeit);
 
 
 #endif

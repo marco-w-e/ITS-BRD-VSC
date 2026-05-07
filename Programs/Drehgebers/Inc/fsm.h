@@ -22,7 +22,5 @@ int getDirection(int oldPhase,int Phase,Direction *currentDirection);
 
 extern char const* directionName[];
 
-int getDirection(int oldPhase, int Phase, Direction *currentDirection);
-
 #endif
 //EOF

@@ -12,24 +12,26 @@
 #include <stdbool.h>
 #include "input.h"
 #include "rechner.h"
-
+#include "fsm.h"
+#include "fehler.h"
 typedef enum {
-    IDEL,
+    IDLE,
     FORWARD,
     BACKWARD,
     PROBLEM // Muss ERROR unbennen weil stm32f4xx.h schon ERROR definiert hat.,
 }Direction;
-char const* directionName[] = {"IDEL","FORWARD","BACKWARD","PROBLEM"};
+
+char const* directionName[] = {"IDLE","FORWARD","BACKWARD","PROBLEM"};
 
 static const Direction  matrix[4][4] = {
-{IDEL,BACKWARD,FORWARD,PROBLEM},
-{FORWARD,IDEL,PROBLEM,BACKWARD},
-{BACKWARD,PROBLEM,IDEL,FORWARD},
-{PROBLEM,FORWARD,BACKWARD,IDEL}
+{IDLE,BACKWARD,FORWARD,PROBLEM},
+{FORWARD,IDLE,PROBLEM,BACKWARD},
+{BACKWARD,PROBLEM,IDLE,FORWARD},
+{PROBLEM,FORWARD,BACKWARD,IDLE}
 };
 
 int getDirection(int oldPhase,int Phase,Direction *currentDirection){
     
   *currentDirection = matrix[oldPhase][Phase];
-  return 1;
+  return WORKING;
 }

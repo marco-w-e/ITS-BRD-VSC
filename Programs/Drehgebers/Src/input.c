@@ -13,6 +13,7 @@
 #include "stm32f4xx.h"
 #include <stdbool.h>
 #include "lcd.h"
+#include "fehler.h"
 
 
 int gpioAusLesen(){
