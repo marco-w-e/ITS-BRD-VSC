@@ -9,7 +9,6 @@
   */
 /* Includes ------------------------------------------------------------------*/
 
-#include "stm32f4xx_hal.h"
 #include "init.h"
 #include "LCD_GUI.h"
 #include "LCD_Touch.h"
@@ -38,7 +37,7 @@ int main(void) {
 	while(1) {
 		phase =gpioAusLesen();
 		LCDprintint(phase);
-		getDirection(oldPhase,phase,&currentDirection)
+		getDirection(oldPhase,phase,&currentDirection);
 		oldPhase = phase;
 		lcdPrintS(directionName[currentDirection]);
 	}

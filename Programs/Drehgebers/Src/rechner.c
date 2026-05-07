@@ -17,15 +17,15 @@ typedef enum {
     IDEL,
     FORWARD,
     BACKWARD,
-    ERRO,
+    PROBLEM // Muss ERROR unbennen weil stm32f4xx.h schon ERROR definiert hat.,
 }Direction;
-char const* directionName[] = {"IDEL","FORWARD","BACKWARD","ERRO"}
+char const* directionName[] = {"IDEL","FORWARD","BACKWARD","PROBLEM"}
 
-static const Direction  matrix[4][4]{
-{IDEL,BACKWARD,FORWARD,ERRO}
-{FORWARD,IDLE,ERRO,BACKWARD}
-{BACKWARD,ERRO,IDLE,FORWARD}
-{ERRO,FORWARD,BACKWARD,IDLE}
+static const Direction  matrix[4][4];{
+{IDEL,BACKWARD,FORWARD,PROBLEM}
+{FORWARD,IDLE,PROBLEM,BACKWARD}
+{BACKWARD,PROBLEM,IDLE,FORWARD}
+{PROBLEM,FORWARD,BACKWARD,IDLE}
 }
 
 int getDirection(int oldPhase,int Phase,Direction *currentDirection){

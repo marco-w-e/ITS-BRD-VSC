@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @note    Aufgabe 2 - Drehgeber
-  * @file    display_output.c
+  * @file    fsm.c
   * @author  Dylan Dagomber 2815132, Marco Weidner
   * @date    03.05.2026
   * @brief   
