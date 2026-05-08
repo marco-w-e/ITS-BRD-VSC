@@ -188,7 +188,6 @@ project:
         - file: Inc/main.h
         - file: Inc/output.h
         - file: Inc/rechner.h
-        - file: Inc/display.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
@@ -198,7 +197,6 @@ project:
         - file: Src/input.c
         - file: Src/output.c
         - file: Src/rechner.c
-        - file: Src/display.c
 
   components:
     - component: ARM::CMSIS:CORE

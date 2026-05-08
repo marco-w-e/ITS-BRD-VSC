@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 int gpioAusLesen(void);
-=======
 /**
   ******************************************************************************
   * @note    Aufgabe 2 - Drehgeber
@@ -11,11 +9,11 @@ int gpioAusLesen(void);
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
+#include <stdbool.h>
 #ifndef INPUT_H
 #define INPUT_H
 //
-
-
+int gpioAusLesen();
+bool inputS6(void);
 #endif
 //EOF
->>>>>>> 8cc0e88576f887105e11da1653c85052b1a58dfc

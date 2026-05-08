@@ -14,22 +14,27 @@
 #include <stdbool.h>
 #include "input.h"
 typedef enum {
-    IDEL,
+    IDLE,
     FORWARD,
     BACKWARD,
     ERRO,
 }Direction;
-char const* directionName[] = {"IDEL","FORWARD","BACKWARD","ERRO"}
+char const* directionName[] = {"IDEL","FORWARD","BACKWARD","ERRO"};
 
-static const Direction  matrix[4][4]{
-{IDEL,BACKWARD,FORWARD,ERRO}
-{FORWARD,IDLE,ERRO,BACKWARD}
-{BACKWARD,ERRO,IDLE,FORWARD}
-{ERRO,FORWARD,BACKWARD,IDLE}
-}
+static const Direction matrix[4][4] = {
+    {IDLE,     BACKWARD, FORWARD,  ERRO},
+    {FORWARD,  IDLE,     ERRO,     BACKWARD},
+    {BACKWARD, ERRO,     IDLE,     FORWARD},
+    {ERRO,     FORWARD,  BACKWARD, IDLE}
+};
 
 int getDirection(int oldPhase,int Phase,Direction *currentDirection){
     
   *currentDirection = matrix[oldPhase][Phase];
   return 1;
 }
+double degree (int menge){
+return menge *(360.0 / 1200.0);
+
+}
+
