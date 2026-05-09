@@ -13,10 +13,10 @@
 //
 char displayBuffer[32];
 void layout(void);
-
-int degreePrint(int degree);
-
-int  speedPrint(int speed);
+int degreePrint(void);
+int degreePrint1(double winkel);
+void degreeToString(double winkel );
+int  speedPrint(double speed);
 
 #endif
 //EOF

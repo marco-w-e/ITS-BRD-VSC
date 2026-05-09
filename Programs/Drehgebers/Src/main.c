@@ -76,12 +76,13 @@ int main(void) {
 
 			winkel = degree(amountPhases);
 			geschwindigkeit = speed(amountPhases,oldAmountPhases,window);
+			degreeToString(winkel);
 			
-			if(winkel != oldWinkel){
-			degreePrint(winkel);
-			speedPrint(geschwindigkeit);
+            if((winkel != oldWinkel) && (window >= T500MS)){
+                degreePrint();
+			
 			}
-			if(oldAmountPhases != amountPhases){
+			if(oldAmountPhases != amountPhases && (window >= T500MS)){
 				speedPrint(geschwindigkeit);
 			}
 			oldWinkel= winkel;
