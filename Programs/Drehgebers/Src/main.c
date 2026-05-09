@@ -46,6 +46,7 @@ int main(void) {
   int phase;                     // phase gerade hoffentlich
   int oldPhase = gpioAusLesen(); // sagt der name ig
 
+<<<<<<< HEAD
   int amountPhases = 0;
   int oldAmountPhases = 0; // ich denke ist schlüssig oder?
   // die zeit an der der timer startet bin mir nicht sicher ob das das richtige
@@ -54,6 +55,27 @@ int main(void) {
   double winkel = 0.0;
   double oldWinkel = 0.0;       // du weißt
   double geschwindigkeit = 0.0; // ^
+=======
+			winkel = degree(amountPhases);
+			geschwindigkeit = speed(amountPhases,oldAmountPhases,window);
+			degreeToString(winkel);
+			
+            if((winkel != oldWinkel) && (window >= T500MS)){
+                degreePrint();
+			
+			}
+			if(oldAmountPhases != amountPhases && (window >= T500MS)){
+				speedPrint(geschwindigkeit);
+			}
+			oldWinkel= winkel;
+			oldAmountPhases = amountPhases;
+			// viel von den  sachen müssen noch in unterfunktionen und diese in ihre passende module
+			// dasselbe für den winkel speed dann nur noch led aus gabe und 
+			// erro loop :)
+		}
+       
+		
+>>>>>>> 34fba3e15c5fa62f2e74299464d021af97a2a164
 
   while (1) {
     // die kommentare sind noch nicht fertige  methoden überwiegend

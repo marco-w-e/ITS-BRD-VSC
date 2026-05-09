@@ -11,8 +11,13 @@
 #include "stm32f4xx.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include "lcd.h"
-char displayBufffer[32];
+char speedBufffer[32];
+char degreeBufffer[32];
+int deLength;
+int deIndex = 1;
+bool deHasNext= true;
 
 void layout(void){
     lcdGotoXY(1, 1);
@@ -20,14 +25,35 @@ void layout(void){
 	  lcdGotoXY(1, 3);
     lcdPrintS("Speed:");
 }
-int degreePrint(double degree){
-  snprintf (displayBufffer,sizeof displayBufffer, " %.3f deg",degree);
+
+int degreePrint(void){
+  if(deHasNext){
+    lcdGotoXY(1, 2);
+    lcdPrintC(degreeBufffer[deIndex]);
+    deIndex++;
+    if(deIndex >= deLength){
+      deHasNext = false ;
+
+    }
+  }
+}
+
+int degreePrint1(double degree){
+  snprintf (degreeBufffer,sizeof degreeBufffer, " %.3f deg",degree);
 	lcdGotoXY(1, 2);
-  lcdPrintC(displayBufffer[1]);
-  lcdPrintC(displayBufffer[2]);
+  lcdPrintC(degreeBufffer[1]);
+  
 }
 int speedPrint(double speed){
-    snprintf(displayBufffer,sizeof displayBufffer, " %.3f d/sek",speed);
+    snprintf(speedBufffer,sizeof speedBufffer, " %.3f d/sek",speed);
 		lcdGotoXY(1, 4);
-    lcdPrintC(displayBufffer[1]);
+    lcdPrintC(speedBufffer[1]);
+}
+
+void degreeToString(double degree){
+  snprintf (degreeBufffer,sizeof degreeBufffer, " %.3f deg",degree);
+  deLength = strlen(degreeBufffer);
+  deIndex =1;
+  deHasNext= true;
+
 }
