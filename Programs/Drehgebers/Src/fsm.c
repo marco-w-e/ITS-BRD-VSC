@@ -34,7 +34,7 @@ void reset(int *amountPhases, int *oldAmountPhases,
 {
     *amountPhases    = 0;
     *oldAmountPhases = 0;
-    *currentDirection = IDEL;
+    *currentDirection = IDLE;
     *winkel          = 0.0;
     *oldWinkel       = 0.0;
     *geschwindigkeit = 0.0;

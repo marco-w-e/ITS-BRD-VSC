@@ -84,7 +84,7 @@ int main(void) {
           if(inputS6()) {
             amountPhases     = 0;
             oldAmountPhases  = 0;
-            currentDirection = IDEL;
+            currentDirection = IDLE;
             winkel           = 0.0;
             oldWinkel        = 0.0;
             geschwindigkeit  = 0.0;
@@ -103,13 +103,14 @@ int main(void) {
       winkel = degree(amountPhases);
       geschwindigkeit = speed(amountPhases, oldAmountPhases, window);
 
-      degreeToString(winkel);
+      
       if ((winkel != oldWinkel) && (window >= T500MS)) {
-        degreePrint();
         
+        degreeToString(winkel);
       }
+      degreePrint();
       if ((oldAmountPhases != amountPhases) &&(window >= T500MS) ) {
-        speedPrint(geschwindigkeit);
+        //speedPrint(geschwindigkeit);
       }
       oldWinkel = winkel;
       oldAmountPhases = amountPhases;

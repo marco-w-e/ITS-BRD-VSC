@@ -14,10 +14,11 @@
 #include <string.h>
 #include "lcd.h"
 char speedBufffer[32];
+
 char degreeBufffer[32];
 int deLength;
 int deIndex = 1;
-bool deHasNext= true;
+bool deHasNext= false;
 
 void layout(void){
     lcdGotoXY(1, 1);
@@ -28,7 +29,9 @@ void layout(void){
 
 int degreePrint(void){
   if(deHasNext){
-    lcdGotoXY(1, 2);
+   if (deIndex == 1) {
+            lcdGotoXY(1, 2); 
+        }
     lcdPrintC(degreeBufffer[deIndex]);
     deIndex++;
     if(deIndex >= deLength){
@@ -51,8 +54,8 @@ int speedPrint(double speed){
 }
 
 void degreeToString(double degree){
-  snprintf (degreeBufffer,sizeof degreeBufffer, " %.3f deg",degree);
-  deLength = strlen(degreeBufffer);
+  snprintf (degreeBufffer,sizeof degreeBufffer, " %.3f",degree);
+  deLength = (int)strlen(degreeBufffer);
   deIndex =1;
   deHasNext= true;
 
