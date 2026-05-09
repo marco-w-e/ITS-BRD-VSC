@@ -46,7 +46,6 @@ int main(void) {
   int phase;                     // phase gerade hoffentlich
   int oldPhase = gpioAusLesen(); // sagt der name ig
 
-<<<<<<< HEAD
   int amountPhases = 0;
   int oldAmountPhases = 0; // ich denke ist schlüssig oder?
   // die zeit an der der timer startet bin mir nicht sicher ob das das richtige
@@ -55,27 +54,6 @@ int main(void) {
   double winkel = 0.0;
   double oldWinkel = 0.0;       // du weißt
   double geschwindigkeit = 0.0; // ^
-=======
-			winkel = degree(amountPhases);
-			geschwindigkeit = speed(amountPhases,oldAmountPhases,window);
-			degreeToString(winkel);
-			
-            if((winkel != oldWinkel) && (window >= T500MS)){
-                degreePrint();
-			
-			}
-			if(oldAmountPhases != amountPhases && (window >= T500MS)){
-				speedPrint(geschwindigkeit);
-			}
-			oldWinkel= winkel;
-			oldAmountPhases = amountPhases;
-			// viel von den  sachen müssen noch in unterfunktionen und diese in ihre passende module
-			// dasselbe für den winkel speed dann nur noch led aus gabe und 
-			// erro loop :)
-		}
-       
-		
->>>>>>> 34fba3e15c5fa62f2e74299464d021af97a2a164
 
   while (1) {
     // die kommentare sind noch nicht fertige  methoden überwiegend
@@ -87,12 +65,14 @@ int main(void) {
         amountPhases++;
         setLED(PIN_LED23);
         clearLED(PIN_LED22);
+        clearLED(PIN_LED21);
         setLEDBinary(amountPhases);
     
       } else if (currentDirection == BACKWARD) {
         amountPhases--;
         setLED(PIN_LED22);
         clearLED(PIN_LED23);
+        clearLED(PIN_LED21);
         setLEDBinary(amountPhases);
 
     } else if (currentDirection == ERRO) {
@@ -100,6 +80,17 @@ int main(void) {
         clearLED(PIN_LED23);
         clearLED(PIN_LED22);
         setLEDBinary(amountPhases);
+        while (1) {
+          if(inputS6()) {
+            amountPhases     = 0;
+            oldAmountPhases  = 0;
+            currentDirection = IDEL;
+            winkel           = 0.0;
+            oldWinkel        = 0.0;
+            geschwindigkeit  = 0.0;
+            start            = TIM2->CNT;
+            break;
+        }}
       }
       oldPhase = phase;
     }
@@ -113,7 +104,7 @@ int main(void) {
       geschwindigkeit = speed(amountPhases, oldAmountPhases, window);
 
       if (winkel != oldWinkel) {
-        degreePrint(winkel);
+        degreePrint();
         speedPrint(geschwindigkeit);
       }
       if (oldAmountPhases != amountPhases) {
