@@ -17,12 +17,12 @@
 #define PIN_LED23 7
 
 
-void clearLED(int led);
+int clearLED(int led);
 
 
-void setLED(int led);
+int setLED(int led);
 
-void setLEDBinary(int phase);
+int setLEDBinary(int phase);
 
 #endif
 //EOF

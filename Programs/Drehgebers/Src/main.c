@@ -18,12 +18,12 @@
 #include "init.h"
 #include "input.h"
 #include "lcd.h"
+#include "output.h"
 #include "rechner.h"
 #include "stm32f4xx_hal.h"
 #include "timer.h" // Dein Timer-Modul
 #include <stdbool.h>
 #include <stdio.h>
-#include "output.h"
 
 // HOFFE DAS IST RICHTIG IDK hab chat wegen dem timer gefragt un der meinte das
 // das stimmt.
@@ -42,80 +42,65 @@ int main(void) {
   uint32_t start = TIM2->CNT;
   uint32_t now;
   uint32_t window;
-
-  int phase;                     // phase gerade hoffentlich
-  int oldPhase = gpioAusLesen(); // sagt der name ig
-
+  int phase;
+  int oldPhase = gpioAusLesen();
   int amountPhases = 0;
-  int oldAmountPhases = 0; // ich denke ist schlüssig oder?
-  // die zeit an der der timer startet bin mir nicht sicher ob das das richtige
-  // ist work in progress ahha
-  Direction currentDirection; //....
+  int oldAmountPhases = 0;
+  Direction currentDirection = IDLE;
   double winkel = 0.0;
-  double oldWinkel = 0.0;       // du weißt
-  double geschwindigkeit = 0.0; // ^
+  double oldWinkel = 0.0;
+  double geschwindigkeit = 0.0;
 
   while (1) {
-    // die kommentare sind noch nicht fertige  methoden überwiegend
     phase = gpioAusLesen();
 
     if (phase != oldPhase) {
       getDirection(oldPhase, phase, &currentDirection);
-      if (currentDirection == FORWARD) {
+
+      if (currentDirection == ERRO) {
+        setLED(PIN_LED21);
+        clearLED(PIN_LED23);
+        clearLED(PIN_LED22);
+        setLEDBinary(amountPhases);
+        bool errorActive = true;
+        while (errorActive) {
+          if (inputS6()) {
+            reset(&amountPhases, &oldAmountPhases, &currentDirection, &winkel,
+                  &oldWinkel, &geschwindigkeit);
+            errorActive = false;
+          }
+        }
+      } else if (currentDirection == FORWARD) {
         amountPhases++;
         setLED(PIN_LED23);
         clearLED(PIN_LED22);
         clearLED(PIN_LED21);
         setLEDBinary(amountPhases);
-    
       } else if (currentDirection == BACKWARD) {
         amountPhases--;
         setLED(PIN_LED22);
         clearLED(PIN_LED23);
         clearLED(PIN_LED21);
         setLEDBinary(amountPhases);
-
-    } else if (currentDirection == ERRO) {
-        setLED(PIN_LED21);
-        clearLED(PIN_LED23);
-        clearLED(PIN_LED22);
-        setLEDBinary(amountPhases);
-        while (1) {
-          if(inputS6()) {
-            amountPhases     = 0;
-            oldAmountPhases  = 0;
-            currentDirection = IDEL;
-            winkel           = 0.0;
-            oldWinkel        = 0.0;
-            geschwindigkeit  = 0.0;
-            start            = TIM2->CNT;
-            break;
-        }}
       }
       oldPhase = phase;
     }
 
-
     now = TIM2->CNT;
     window = now - start;
     if ((window >= T250MS && phase != oldPhase) || (window >= T500MS)) {
-
       winkel = degree(amountPhases);
       geschwindigkeit = speed(amountPhases, oldAmountPhases, window);
-
       degreeToString(winkel);
       if ((winkel != oldWinkel) && (window >= T500MS)) {
         degreePrint();
-        
       }
-      if ((oldAmountPhases != amountPhases) &&(window >= T500MS) ) {
+      if ((oldAmountPhases != amountPhases) && (window >= T500MS)) {
         speedPrint(geschwindigkeit);
       }
       oldWinkel = winkel;
       oldAmountPhases = amountPhases;
-      // viel von den  sachen müssen noch in unterfunktionen und diese in ihre
-      // passende module dasselbe für den winkel speed dann nur noch led aus
-      // gabe und erro loop :)
+      start = TIM2->CNT;
     }
   }
 }

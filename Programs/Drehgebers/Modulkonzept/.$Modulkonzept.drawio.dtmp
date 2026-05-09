@@ -106,14 +106,14 @@
         <mxCell id="_xhimHNcXMs2dSqkmUqC-16" value="fsm" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="380" y="300" width="140" height="280" as="geometry" />
         </mxCell>
+        <mxCell id="_xhimHNcXMs2dSqkmUqC-19" value="Direction matrix[4][4]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="_xhimHNcXMs2dSqkmUqC-16">
+          <mxGeometry y="30" width="140" height="30" as="geometry" />
+        </mxCell>
         <mxCell id="_xhimHNcXMs2dSqkmUqC-17" value="int getDirection(&lt;br&gt;int oldPhase,&lt;br&gt;int Phase,&lt;br&gt;Direction&lt;br&gt;*currentDirection)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="_xhimHNcXMs2dSqkmUqC-16">
-          <mxGeometry y="30" width="140" height="80" as="geometry" />
+          <mxGeometry y="60" width="140" height="80" as="geometry" />
         </mxCell>
         <mxCell id="_xhimHNcXMs2dSqkmUqC-18" value="&lt;div&gt;int reset(&lt;br&gt;int *amountPhases, &lt;br&gt;int *oldAmountPhases, Direction *currentDirection,&lt;br&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;double *winkel, &lt;br&gt;double *oldWinkel,&lt;br&gt;double *geschwindigkeit)&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="_xhimHNcXMs2dSqkmUqC-16">
-          <mxGeometry y="110" width="140" height="140" as="geometry" />
-        </mxCell>
-        <mxCell id="_xhimHNcXMs2dSqkmUqC-19" value="Item 3" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="_xhimHNcXMs2dSqkmUqC-16">
-          <mxGeometry y="250" width="140" height="30" as="geometry" />
+          <mxGeometry y="140" width="140" height="140" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

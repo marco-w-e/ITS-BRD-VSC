@@ -12,21 +12,24 @@
 #include "output.h"
 #include "stm32f4xx_hal.h"
 
-void setLED(int led){
+int setLED(int led){
 
   GPIOE -> BSRR = (1<<led);
+  return WORKING;
 }
 
-void clearLED(int led){
+int clearLED(int led){
 
   GPIOE -> BSRR = (1<< (led + 16));
+  return WORKING;
 }
 
-void setLEDBinary(int phase){
+int setLEDBinary(int phase){
 
   int bits = phase & 0xFF;
 
   GPIOD->BSRR = (0xFF << 16);
   GPIOD->BSRR = bits;
+  return WORKING;
 
 }

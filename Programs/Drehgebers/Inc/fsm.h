@@ -19,5 +19,9 @@ typedef enum {
 }Direction;
 
 int getDirection(int oldPhase,int Phase,Direction *currentDirection);
+
+
+void reset(int *amountPhases, int *oldAmountPhases, Direction *currentDirection,
+           double *winkel, double *oldWinkel, double *geschwindigkeit);
 #endif
 //EOF

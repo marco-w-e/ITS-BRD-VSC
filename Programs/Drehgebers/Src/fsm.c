@@ -25,17 +25,17 @@ static const Direction matrix[4][4] = {
 int getDirection(int oldPhase,int Phase,Direction *currentDirection){
     
   *currentDirection = matrix[oldPhase][Phase];
-  return 1;
+  return WORKING;
 }
 
-void reset(int *amountPhases, int *oldAmountPhases, 
-           Direction *currentDirection, double *winkel, 
-           double *oldWinkel, double *geschwindigkeit)
+int reset(int *amountPhases, int *oldAmountPhases, Direction *currentDirection,
+           double *winkel, double *oldWinkel, double *geschwindigkeit)
 {
-    *amountPhases    = 0;
-    *oldAmountPhases = 0;
-    *currentDirection = IDEL;
-    *winkel          = 0.0;
-    *oldWinkel       = 0.0;
-    *geschwindigkeit = 0.0;
+    *amountPhases     = 0;
+    *oldAmountPhases  = 0;
+    *currentDirection = IDLE;
+    *winkel           = 0.0;
+    *oldWinkel        = 0.0;
+    *geschwindigkeit  = 0.0;
+    return WORKING;
 }
