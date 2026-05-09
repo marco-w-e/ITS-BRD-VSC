@@ -57,20 +57,7 @@ int main(void) {
     if (phase != oldPhase) {
       getDirection(oldPhase, phase, &currentDirection);
 
-      if (currentDirection == ERRO) {
-        setLED(PIN_LED21);
-        clearLED(PIN_LED23);
-        clearLED(PIN_LED22);
-        setLEDBinary(amountPhases);
-        bool errorActive = true;
-        while (errorActive) {
-          if (inputS6()) {
-            reset(&amountPhases, &oldAmountPhases, &currentDirection, &winkel,
-                  &oldWinkel, &geschwindigkeit);
-            errorActive = false;
-          }
-        }
-      } else if (currentDirection == FORWARD) {
+      if (currentDirection == FORWARD) {
         amountPhases++;
         setLED(PIN_LED23);
         clearLED(PIN_LED22);
@@ -83,6 +70,20 @@ int main(void) {
         clearLED(PIN_LED21);
         setLEDBinary(amountPhases);
       }
+        else if (currentDirection == ERRO) {
+        setLED(PIN_LED21);
+        clearLED(PIN_LED23);
+        clearLED(PIN_LED22);
+        setLEDBinary(amountPhases);
+        bool errorActive = true;
+        while (errorActive) {
+          if (inputS6()) {
+            reset(&amountPhases, &oldAmountPhases, &currentDirection, &winkel,
+                  &oldWinkel, &geschwindigkeit);
+            errorActive = false;
+          }
+        }
+      };
       oldPhase = phase;
     }
 
