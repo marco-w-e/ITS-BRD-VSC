@@ -1,46 +1,37 @@
 /**
   ******************************************************************************
   * @note    Aufgabe 2 - Drehgeber
-  * @file    rechner.c
+  * @file    fsm.c
   * @author  Dylan Dagomber 2815132, Marco Weidner
   * @date    03.05.2026
-  * @brief   Berechnung von Winkel und Winkelgeschwindigkeit
+  * @brief   
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-
 #include "stm32f4xx_hal.h"
 #include <stdbool.h>
 #include "input.h"
+#include "rechner.h"
+#include "fsm.h"
+#include "fehler.h"
 typedef enum {
     IDLE,
     FORWARD,
     BACKWARD,
-    ERRO,
+    PROBLEM // Muss ERROR unbennen weil stm32f4xx.h schon ERROR definiert hat.,
 }Direction;
 
+char const* directionName[] = {"IDLE","FORWARD","BACKWARD","PROBLEM"};
 
-static const Direction matrix[4][4] = {
-    {IDLE,     BACKWARD, FORWARD,  ERRO},
-    {FORWARD,  IDLE,     ERRO,     BACKWARD},
-    {BACKWARD, ERRO,     IDLE,     FORWARD},
-    {ERRO,     FORWARD,  BACKWARD, IDLE}
+static const Direction  matrix[4][4] = {
+{IDLE,BACKWARD,FORWARD,PROBLEM},
+{FORWARD,IDLE,PROBLEM,BACKWARD},
+{BACKWARD,PROBLEM,IDLE,FORWARD},
+{PROBLEM,FORWARD,BACKWARD,IDLE}
 };
 
 int getDirection(int oldPhase,int Phase,Direction *currentDirection){
     
   *currentDirection = matrix[oldPhase][Phase];
-  return 1;
-}
-
-double degree (int menge){
-return menge *(360.0 / 1200.0);
-
-}
-
-double speed (int mengePhasen,int altMengePhasen,uint32_t zeit){
- 
-  double secWindow = (double)zeit / 180000000.0;
-       return (double)(mengePhasen - altMengePhasen) * (360.0 / 1200.0) / secWindow;
-    
+  return WORKING;
 }

@@ -1,0 +1,7 @@
+{
+    "debug.hideSlowPreLaunchWarning": true,
+    "debug.showInStatusBar": "never",
+    "clangd.arguments": [
+        "--compile-commands-dir=c:\\Users\\Dylan\\Marco\\ITS-BRD-VSC\\Programs\\Taschenrechner\\out\\Taschenrechner\\ITSboard\\Debug"
+    ]
+}

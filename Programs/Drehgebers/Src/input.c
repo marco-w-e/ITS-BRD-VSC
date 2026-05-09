@@ -14,6 +14,7 @@
 #include <stdbool.h>
 
 #include "lcd.h"
+#include "fehler.h"
 
 
 int gpioAusLesen(){

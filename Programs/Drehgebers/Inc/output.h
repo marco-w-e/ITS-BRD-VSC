@@ -12,6 +12,7 @@
 #define OUTPUT_H
 //
 
+int setLED(int direction);
 
 #endif
 //EOF

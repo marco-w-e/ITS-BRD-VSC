@@ -188,7 +188,7 @@ project:
         - file: Inc/main.h
         - file: Inc/output.h
         - file: Inc/rechner.h
-
+        
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
       files:

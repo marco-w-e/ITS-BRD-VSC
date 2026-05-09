@@ -1,31 +1,26 @@
 /**
   ******************************************************************************
   * @note    Aufgabe 2 - Drehgeber
-  * @file    rechner.h
+  * @file    fsm.h
   * @author  Dylan Dagomber 2815132, Marco Weidner
   * @date    03.05.2026
-  * @brief   Berechnung von Winkel und Winkelgeschwindigkeit
+  * @brief   
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-#ifndef RECHNER_H
-#define RECHNER_H
+#ifndef FSM_H
+#define FSM_H
+//
 typedef enum {
-    IDEL,
+    IDLE,
     FORWARD,
     BACKWARD,
-    ERRO,
-}Direction;
-
-extern const char* directionName[];
-
-int calculateDrehgeschwindigkeit(int oldPhase, int newPhase, int timeInterval);
-
+    PROBLEM // Muss ERROR unbennen weil stm32f4xx.h schon ERROR definiert hat.
+} Direction;
 
 int getDirection(int oldPhase,int Phase,Direction *currentDirection);
 
-double degree (int menge);
+extern char const* directionName[];
 
-double speed (int mengePhasen,int altMengePhasen,uint32_t zeit);
 #endif
 //EOF
