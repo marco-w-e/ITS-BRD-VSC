@@ -18,5 +18,6 @@ int degreePrint(int degree);
 
 int  speedPrint(int speed);
 
+int  phasePrint(int phase);
 #endif
 //EOF

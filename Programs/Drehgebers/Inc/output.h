@@ -8,11 +8,21 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
 #ifndef OUTPUT_H
 #define OUTPUT_H
 //
+#define PIN_LED21 5
+#define PIN_LED22 6
+#define PIN_LED23 7
 
-int setLED(int direction);
+
+void clearLED(int led);
+
+
+void setLED(int led);
+
+void setLEDBinary(int phase);
 
 #endif
 //EOF
