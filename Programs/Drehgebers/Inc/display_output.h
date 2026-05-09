@@ -17,6 +17,7 @@ int degreePrint(void);
 int degreePrint1(double winkel);
 void degreeToString(double winkel );
 int  speedPrint(double speed);
+void speedToString(double speed);
 
 int  phasePrint(int phase);
 #endif

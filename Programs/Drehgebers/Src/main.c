@@ -28,9 +28,10 @@
 // HOFFE DAS IST RICHTIG IDK hab chat wegen dem timer gefragt un der meinte das
 // das stimmt.
 // war zu doof zum selber rechnen mäh :/
-#define T250MS 45000000 // 180MHz * 0.25s
-#define T500MS 90000000 // 180MHz * 0.50s
 
+#define TICKS_PER_US 90
+#define T250MS (250000 * TICKS_PER_US)
+#define T500MS (500000 * TICKS_PER_US)
 /// LIES DIE KOMMENTARA HAB MIR MÜHE GEGEBEN !!!!!!!!!!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 int main(void) {
@@ -52,8 +53,28 @@ int main(void) {
   double geschwindigkeit = 0.0;
 
   while (1) {
+    
+    
     phase = gpioAusLesen();
-
+    now = getTimeStamp();
+     window = now - start;
+    
+    
+     if ((window >= T250MS && phase != oldPhase) || (window >= T500MS)) {
+      winkel = degree(amountPhases);
+      geschwindigkeit = speed(amountPhases, oldAmountPhases, window);
+      degreeToString(winkel);
+      //speedToString(geschwindigkeit); muss noch mal ran 
+      
+      oldWinkel = winkel;
+      oldAmountPhases = amountPhases;
+      start = now;
+    }
+    
+    
+    
+    
+    
     if (phase != oldPhase) {
       getDirection(oldPhase, phase, &currentDirection);
 
@@ -86,23 +107,6 @@ int main(void) {
       };
       oldPhase = phase;
     }
-
-    now = TIM2->CNT;
-    window = now - start;
-    if ((window >= T250MS && phase != oldPhase) || (window >= T500MS)) {
-      winkel = degree(amountPhases);
-      
-      if ((winkel != oldWinkel) && (window >= T500MS)) {
-      geschwindigkeit = speed(amountPhases, oldAmountPhases, window);
-      degreeToString(winkel);
-      }
-      degreePrint();
-      if ((oldAmountPhases != amountPhases) && (window >= T500MS)) {
-        //speedPrint(geschwindigkeit);
-      }
-      oldWinkel = winkel;
-      oldAmountPhases = amountPhases;
-      start = TIM2->CNT;
-    }
+    degreePrint();
   }
 }
