@@ -11,7 +11,12 @@
 #ifndef DISPLAY_OUTPUT_H
 #define DISPLAY_OUTPUT_H
 //
+char displayBuffer[32];
+void layout(void);
 
+int degreePrint(int degree);
+
+int  speedPrint(int speed);
 
 #endif
 //EOF

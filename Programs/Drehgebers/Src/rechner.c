@@ -19,7 +19,7 @@ typedef enum {
     BACKWARD,
     ERRO,
 }Direction;
-char const* directionName[] = {"IDEL","FORWARD","BACKWARD","ERRO"};
+
 
 static const Direction matrix[4][4] = {
     {IDLE,     BACKWARD, FORWARD,  ERRO},
@@ -33,8 +33,15 @@ int getDirection(int oldPhase,int Phase,Direction *currentDirection){
   *currentDirection = matrix[oldPhase][Phase];
   return 1;
 }
+
 double degree (int menge){
 return menge *(360.0 / 1200.0);
 
 }
 
+double speed (int mengePhasen,int altMengePhasen,uint32_t zeit){
+ 
+  double secWindow = (double)zeit / 180000000.0;
+       return (double)(mengePhasen - altMengePhasen) * (360.0 / 1200.0) / secWindow;
+    
+}

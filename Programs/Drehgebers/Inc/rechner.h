@@ -22,7 +22,9 @@ extern const char* directionName[];
 
 
 int getDirection(int oldPhase,int Phase,Direction *currentDirection);
+
 double degree (int menge);
 
+double speed (int mengePhasen,int altMengePhasen,uint32_t zeit);
 #endif
 //EOF
