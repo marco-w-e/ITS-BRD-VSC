@@ -14,7 +14,6 @@
 #include <string.h>
 #include "lcd.h"
 char speedBufffer[32];
-
 char degreeBufffer[32];
 int deLength;
 int deIndex = 1;
