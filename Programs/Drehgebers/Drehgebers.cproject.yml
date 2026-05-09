@@ -188,7 +188,8 @@ project:
         - file: Inc/main.h
         - file: Inc/output.h
         - file: Inc/rechner.h
-        
+        - file: Inc/fsm.h
+
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
       files:
@@ -197,6 +198,7 @@ project:
         - file: Src/input.c
         - file: Src/output.c
         - file: Src/rechner.c
+        - file: Src/fsm.c
 
   components:
     - component: ARM::CMSIS:CORE

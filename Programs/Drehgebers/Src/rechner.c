@@ -12,26 +12,8 @@
 #include "stm32f4xx_hal.h"
 #include <stdbool.h>
 #include "input.h"
-typedef enum {
-    IDLE,
-    FORWARD,
-    BACKWARD,
-    ERRO,
-}Direction;
 
 
-static const Direction matrix[4][4] = {
-    {IDLE,     BACKWARD, FORWARD,  ERRO},
-    {FORWARD,  IDLE,     ERRO,     BACKWARD},
-    {BACKWARD, ERRO,     IDLE,     FORWARD},
-    {ERRO,     FORWARD,  BACKWARD, IDLE}
-};
-
-int getDirection(int oldPhase,int Phase,Direction *currentDirection){
-    
-  *currentDirection = matrix[oldPhase][Phase];
-  return 1;
-}
 
 double degree (int menge){
 return menge *(360.0 / 1200.0);

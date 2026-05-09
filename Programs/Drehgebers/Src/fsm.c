@@ -14,24 +14,16 @@
 #include "rechner.h"
 #include "fsm.h"
 #include "fehler.h"
-typedef enum {
-    IDLE,
-    FORWARD,
-    BACKWARD,
-    PROBLEM // Muss ERROR unbennen weil stm32f4xx.h schon ERROR definiert hat.,
-}Direction;
 
-char const* directionName[] = {"IDLE","FORWARD","BACKWARD","PROBLEM"};
-
-static const Direction  matrix[4][4] = {
-{IDLE,BACKWARD,FORWARD,PROBLEM},
-{FORWARD,IDLE,PROBLEM,BACKWARD},
-{BACKWARD,PROBLEM,IDLE,FORWARD},
-{PROBLEM,FORWARD,BACKWARD,IDLE}
+static const Direction matrix[4][4] = {
+    {IDLE,     BACKWARD, FORWARD,  ERRO},
+    {FORWARD,  IDLE,     ERRO,     BACKWARD},
+    {BACKWARD, ERRO,     IDLE,     FORWARD},
+    {ERRO,     FORWARD,  BACKWARD, IDLE}
 };
 
 int getDirection(int oldPhase,int Phase,Direction *currentDirection){
     
   *currentDirection = matrix[oldPhase][Phase];
-  return WORKING;
+  return 1;
 }

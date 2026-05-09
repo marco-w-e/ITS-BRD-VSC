@@ -23,6 +23,7 @@
 #include <stdbool.h>
 #include "lcd.h"
 #include "display_output.h"
+#include "fsm.h"
 // HOFFE DAS IST RICHTIG IDK hab chat wegen dem timer gefragt un der meinte das das stimmt.
 //war zu doof zum selber rechnen mäh :/
 #define T250MS 45000000  // 180MHz * 0.25s

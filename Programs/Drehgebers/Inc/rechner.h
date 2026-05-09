@@ -10,19 +10,12 @@
 /* Includes ------------------------------------------------------------------*/
 #ifndef RECHNER_H
 #define RECHNER_H
-typedef enum {
-    IDEL,
-    FORWARD,
-    BACKWARD,
-    ERRO,
-}Direction;
 
-extern const char* directionName[];
+
 
 int calculateDrehgeschwindigkeit(int oldPhase, int newPhase, int timeInterval);
 
 
-int getDirection(int oldPhase,int Phase,Direction *currentDirection);
 
 double degree (int menge);
 
