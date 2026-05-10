@@ -4,7 +4,10 @@
   * @file    fsm.h
   * @author  Dylan Dagomber 2815132, Marco Weidner
   * @date    03.05.2026
-  * @brief   
+  * @brief   Schnittstelle der FSM zur Drehrichtungserkennung.
+  *          Definiert den Aufzählungstyp Direction (IDLE, FORWARD, BACKWARD, ERRO)
+  *          und deklariert Funktionen zur Richtungsbestimmung anhand von
+  *          Phasenübergängen sowie zur Reinitialisierung aller Zustandsvariablen.
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/

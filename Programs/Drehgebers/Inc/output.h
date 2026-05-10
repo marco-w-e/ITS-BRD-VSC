@@ -4,7 +4,10 @@
   * @file    output.h
   * @author  Dylan Dagomber 2815132, Marco Weidner
   * @date    03.05.2026
-  * @brief   
+  * @brief   Schnittstelle zur LED-Steuerung auf dem ITS-Board.
+  *          Definiert die Pin-Nummern für LED21–LED23 an GPIOE und
+  *          deklariert Funktionen zum Setzen, Löschen und binären
+  *          Anzeigen des Phasenzählers auf den LEDs an GPIOD.  
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/

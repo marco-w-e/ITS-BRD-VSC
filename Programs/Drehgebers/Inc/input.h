@@ -4,7 +4,9 @@
   * @file    input.h
   * @author  Dylan Dagomber 2815132, Marco Weidner 
   * @date    03.05.2026
-  * @brief   
+  * @brief   Schnittstelle zum Einlesen der Drehgeber- und Tastereingänge.
+  *          Deklariert Funktionen zum Auslesen der zwei Phasensignale
+  *          an GPIOF (Bits 0–1) sowie des aktiven-low Tasters S6 (Bit 6).
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/

@@ -4,7 +4,8 @@
   * @file    fehler.h
   * @author  Dylan Dagomber 2815132, Marco Weidner
   * @date    03.05.2026
-  * @brief   
+  * @brief   Fehlercodes für die Drehgeberauswertung.
+  *          Definiert WORKING (0) für fehlerfreien Betrieb und
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
@@ -14,8 +15,6 @@
 
 //
 #define WORKING 0
-#define PHASE_UEBERSPRUNGEN -1
-
 
 #endif
 //EOF
