@@ -57,22 +57,19 @@ int main(void) {
     
     phase = gpioAusLesen();
     now = getTimeStamp();
-     window = now - start;
+    window = now - start;
     
     
      if ((window >= T250MS && phase != oldPhase) || (window >= T500MS)) {
       winkel = degree(amountPhases);
       geschwindigkeit = speed(amountPhases, oldAmountPhases, window);
       degreeToString(winkel);
-      //speedToString(geschwindigkeit); muss noch mal ran 
+      speedToString(geschwindigkeit); //muss noch mal ran 
       
       oldWinkel = winkel;
       oldAmountPhases = amountPhases;
       start = now;
     }
-    
-    
-    
     
     
     if (phase != oldPhase) {

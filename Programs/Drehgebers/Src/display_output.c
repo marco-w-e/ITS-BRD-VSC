@@ -16,10 +16,10 @@
 char speedBufffer[32];
 char degreeBufffer[32];
 int deLength;
-int deIndex = 0;
+int deIndex = 1;
 bool deHasNext= false;
 int spLength;
-int spIndex = 0;
+int spIndex = 1;
 bool spHasNext= false;
 
 void layout(void){
@@ -31,7 +31,7 @@ void layout(void){
 
 int degreePrint(void){
   if(deHasNext){
-   if (deIndex == 0) {
+   if (deIndex == 1) {
             lcdGotoXY(1, 2); 
         }
     lcdPrintC(degreeBufffer[deIndex]);
@@ -40,43 +40,29 @@ int degreePrint(void){
       deHasNext = false ;
 
     }
-  }
-   if(spHasNext){
-   if (spIndex == 0) {
-            lcdGotoXY(1, 4); 
-        }
-    lcdPrintC(speedBufffer[deIndex]);
-    spIndex++;
-    if(spIndex >= spLength){
-      spHasNext = false ;
+  }else if(spHasNext){
+    if (spIndex == 1) {
+              lcdGotoXY(1, 4); 
+          }
+      lcdPrintC(speedBufffer[spIndex]);
+      spIndex++;
+      if(spIndex >= spLength){
+        spHasNext = false ;
 
     }
   }
 }
-
-int degreePrint1(double degree){
-  snprintf (degreeBufffer,sizeof degreeBufffer, " %.3f deg",degree);
-	lcdGotoXY(1, 2);
-  lcdPrintC(degreeBufffer[1]);
-  
-}
-int speedPrint(double speed){
-    snprintf(speedBufffer,sizeof speedBufffer, " %.3f d/sek",speed);
-		lcdGotoXY(1, 4);
-    lcdPrintC(speedBufffer[1]);
-}
-
 void degreeToString(double degree){
   sprintf (degreeBufffer, " %.3f",degree);
   deLength = strlen(degreeBufffer);
-  deIndex = 0;
+  deIndex = 1;
   deHasNext = true;
 
 }
 void speedToString(double speed){
   sprintf (speedBufffer, " %.3f",speed);
   spLength = strlen(speedBufffer);
-  spIndex = 0;
+  spIndex = 1;
   spHasNext = true;
 
 }
