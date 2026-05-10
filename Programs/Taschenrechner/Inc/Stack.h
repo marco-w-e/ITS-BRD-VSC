@@ -19,13 +19,6 @@ int push(int *val);
 
 int pop(int *val);
 
-int  peek(int *val);
-
-int clearStack(void);
-
-
-
-int getTop(int *x);
 
 #endif
 // eof 

@@ -1,11 +1,9 @@
 /**
   ******************************************************************************
   * @file    Stack.c
-  * @author  Marco Weidner
-  * @brief   Kleines Testprogramm fuer neu erstelle Fonts.
+  * @brief   Stack Implementierung - NUR push und pop als oeffentliche Funktionen.
   ******************************************************************************
   */
-/* Includes ------------------------------------------------------------------*/
 
 #include "stdio.h"
 #include "limits.h"
@@ -14,8 +12,6 @@
 #include "rechner.h"
 #include "display.h"
 
-
-
 #define MAX_CAPACITY 20
 
 static int stack[MAX_CAPACITY];
@@ -23,39 +19,16 @@ static int top = -1;
 
 int push(int *val)
 {
-    if(top >= MAX_CAPACITY) return STACK_OVERFLOW;
+    if (top >= MAX_CAPACITY - 1) return STACK_OVERFLOW;
     top++;
     stack[top] = *val;
     return WORKING;
-
 }
+
 int pop(int *val)
 {
-    if(top < 0) return STACK_EMPTY;
+    if (top < 0) return STACK_EMPTY;
     *val = stack[top];
-     top--;
-    return WORKING;
-}
-int  peek(int *val)
-{
-    
-    if(top < 0) return STACK_EMPTY;
-    *val = stack[top];
-    return WORKING;
-
-}
-
-   
-    
-
-int clearStack (){
-    if(top < 0 ) return STACK_EMPTY;
-    int i = top;
-    int x;
-    
-    while (i != -1){
-        pop(&x);
-        i--;
-    }
+    top--;
     return WORKING;
 }

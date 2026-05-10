@@ -21,7 +21,12 @@ int verdoppleTop(void);
 int clear(void);
 
 void intToString (int *zahl);
+
 int peekALL (int *numbers,int *i);
+
+int clearStack(void);
+
+int peek(int *val);
 
 #endif
 // eof 
