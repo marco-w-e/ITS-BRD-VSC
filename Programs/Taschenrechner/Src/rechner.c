@@ -8,7 +8,7 @@
 #include "stdbool.h"
 #include "stdio.h"
 
-#define MAX_LENGHT_STR 20
+#define MAX_LENGTH_STR 20
 
 int intToString(int zahl, char *str)
 {
@@ -214,28 +214,11 @@ int swap(void) {
   return WORKING;
 }
 
-int clear(void) {
-  setNormalMode();
-  int err1 = clearStack();
-  if (err1 != 0)
-    return err1;
-  clearStdout();
-  return WORKING;
-}
-int peekALL(int *numbers,int *size){
-  int val;
-  int i;
-  while(pop(&val)== WORKING){
-      numbers[i] = val;
-      i++ ;
-  }
-  *size = i;
-}
 
 
 int printAlles(void)
 {
-    int numbers[MAX_CAPACITY];
+    int numbers[MAX_LENGTH_STR];
     int size = 0;
     char str[MAX_LENGTH_STR];
 
