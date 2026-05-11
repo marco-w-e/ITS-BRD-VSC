@@ -20,7 +20,7 @@ int verdoppleTop(void);
 
 int clear(void);
 
-void intToString (int *zahl);
+int intToString(int zahl, char *str);
 
 int peekALL (int *numbers,int *i);
 

@@ -58,7 +58,8 @@ int main(void) {
       break;
       case NUMBER: refresh(push(&input.val));
       break;
-                
+      case OVERFLOW: refresh(INT_OVERFLOW); 
+      break;
    }
 	
 	}

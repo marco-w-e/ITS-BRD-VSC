@@ -254,3 +254,11 @@ int verdoppleTop(void) {
 }
 
 
+int clear(void) {
+  setNormalMode();
+  int err1 = clearStack();
+  if (err1 != 0)
+    return err1;
+  clearStdout();
+  return WORKING;
+}
