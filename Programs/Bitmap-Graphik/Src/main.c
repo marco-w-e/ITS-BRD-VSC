@@ -16,7 +16,16 @@
 #include "additionalFonts.h"
 #include "error.h"
 #include "input.h"
+#include <stdint.h>
+#include "BMP_types.h"
 
+uint16_t convertToRgb16(RGBTRIPLE farben){
+		uint16_t farbe;
+		farbe = (farben.rgbtRed >> 3 );
+		farbe |= (farben.rgbtGreen >> 2 );
+		farbe |= (farben.rgbtBlue>> 3 );
+		return farbe;
+	}
 
 int main(void) {
 	initITSboard(); // Initialisierung des ITS Boards
@@ -24,21 +33,42 @@ int main(void) {
 	openNextFile();
 	
 	GUI_init(DEFAULT_BRIGHTNESS);   // Initialisierung des LCD Boards mit Touch
-	TP_Init(false);                 // Initialisierung des LCD Boards mit Touch
+	TP_Init(false);                        // Initialisierung des LCD Boards mit Touch
+	
+	
+	
 
   // Begruessungstext	
-	lcdPrintlnS("Hallo liebes TI-Labor (c-project)");
+
+
+	
 	int x = 1;
 	int y = 1;
-
+	RGBTRIPLE farben;
 	// Test in Endlosschleife
 	while(1) {
 		
+		
+		for( int i = 0;i <= 9 ;i++){
+			nextChar();
+
+		}
+		int start = nextChar();
+		for( int i = 0;i <= start-10 ;i++){
+			nextChar();
+
+		}
+			farben.rgbtBlue = nextChar();
+			farben.rgbtGreen = nextChar();
+			farben.rgbtRed= nextChar();
+			nextChar();
+		
 		while (x != 400){ 
+			
 			Coordinate corrdinat;
 			corrdinat.x = x;
 			corrdinat.y = y;
-			GUI_drawPoint(corrdinat, 35000,DOT_PIXEL_1X1,DOT_FILL_AROUND );
+			GUI_drawPoint(corrdinat,convertToRgb16(farben) ,DOT_PIXEL_1X1,DOT_FILL_AROUND );
 			x++ ;
 
 		}

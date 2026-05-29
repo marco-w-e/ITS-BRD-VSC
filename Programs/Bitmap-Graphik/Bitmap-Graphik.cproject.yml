@@ -184,6 +184,9 @@ project:
         - file: ../../ITS_BRD_LIB/Inc/lcd.h
         - file: Inc/input.h
         - file: farben.h
+        - file: Inc/BMP_types.h
+        - file: Inc/errorhandler.h
+        - file: Inc/MS_basetypes.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
