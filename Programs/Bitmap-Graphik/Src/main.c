@@ -7,25 +7,27 @@
   */
 /* Includes ------------------------------------------------------------------*/
 
+#include "MS_basetypes.h"
 #include "stm32f4xx_hal.h"
 #include "init.h"
 #include "LCD_GUI.h"
 #include "LCD_Touch.h"
-#include "lcd.h"
-#include "fontsFLASH.h"
-#include "additionalFonts.h"
-#include "error.h"
+
 #include "input.h"
 #include <stdint.h>
 #include "BMP_types.h"
 
-uint16_t convertToRgb16(RGBTRIPLE farben){
+#define MAX_BREITE 480
+#define MAX_HÖHE   320
+
+uint16_t convertToRgb16(RGBQUAD farben){
 		uint16_t farbe;
-		farbe = (farben.rgbtRed >> 3 ) << 11;
-		farbe |= (farben.rgbtGreen >> 2 ) << 5;
-		farbe |= (farben.rgbtBlue>> 3 );
+		farbe = (farben.rgbRed >> 3 ) << 11;
+		farbe |= (farben.rgbGreen >> 2 ) << 5;
+		farbe |= (farben.rgbBlue>> 3 );
 		return farbe;
 	}
+
 	
 
 int main(void) {
@@ -35,49 +37,59 @@ int main(void) {
 	
 	GUI_init(DEFAULT_BRIGHTNESS);   // Initialisierung des LCD Boards mit Touch
 	TP_Init(false);                        // Initialisierung des LCD Boards mit Touch
+	int color =0;
 	
-	
-	
-
-  // Begruessungstext	
-
-
-	
-	int x = 1;
-	int y = 1;
-	RGBTRIPLE farben;
-	BITMAPFILEHEADER FileHeader;
-	BITMAPINFOHEADER InfoHeader;
+	RGBQUAD farben;
+	BITMAPFILEHEADER fileHeader;
+	BITMAPINFOHEADER infoHeader;
+	RGBQUAD palette [MAX_COLOR_TABLE_SIZE];
+	Coordinate corrdinat;
 	// Test in Endlosschleife
-	COMread((char*)&FileHeader,sizeof(FileHeader),1); // bracuht noch einen errohandler 
-	COMread((char*)&InfoHeader,sizeof(InfoHeader),1);	
+	
+	COMread((char*)&fileHeader,sizeof(fileHeader),1); // bracuht noch einen errohandler 
+	COMread((char*)&infoHeader,sizeof(infoHeader),1);
+	
+	LONG breit = infoHeader.biWidth;
+	LONG höhe = infoHeader.biHeight;
+	
+	
+	if(infoHeader.biBitCount == 8){
+		COMread((char*)palette,sizeof(RGBQUAD) ,infoHeader.biClrUsed  );
+
+	}
+	if(infoHeader.biCompression == BI_RGB){
+		DWORD bytesPerLine = (((breit * infoHeader.biBitCount) + 31) / 32) * 4;
+			//(((Breite der Zeile)*(Anzahl Bits pro Pixel Eintrag) + 31) / 32) * 4
+			for(int y = höhe -1;y >= 0;y--){
+				
+				for(int x = 0;x < breit ;x++){
+					
+					if(infoHeader.biBitCount == 8){
+					int idx = nextChar();
+					color = convertToRgb16(palette[idx]);
+					}
+					else if(infoHeader.biBitCount == 24){
+					COMread((char *)&farben, sizeof(RGBTRIPLE), 1);
+						color = convertToRgb16(farben);
+					}
+					corrdinat.x = x;
+					corrdinat.y = y;
+					if(x >= 0 && x < MAX_BREITE && y >= 0 && y < MAX_HÖHE){
+						
+						GUI_drawPoint(corrdinat,color ,DOT_PIXEL_1X1,DOT_FILL_AROUND );
+					}
+					
+				}
+
+				
+			}
+	}
 	while(1) {
 		
-		for( int i = 0;i <= 9 ;i++){
-			nextChar();
-
-		}
-		int start = nextChar();
-		for( int i = 0;i <= start- 0xA ;i++){
-			nextChar();
-
-		}
-			farben.rgbtBlue = nextChar();
-			farben.rgbtGreen = nextChar();
-			farben.rgbtRed= nextChar();
-			nextChar();
 		
-		while (x != 400){ 
-			
-			Coordinate corrdinat;
-			corrdinat.x = x;
-			corrdinat.y = y;
-			GUI_drawPoint(corrdinat,convertToRgb16(farben) ,DOT_PIXEL_1X1,DOT_FILL_AROUND );
-			x++ ;
-
-		}
-		x = 0;
-		y++;
+		
+		
+		
 	}
 }
 
