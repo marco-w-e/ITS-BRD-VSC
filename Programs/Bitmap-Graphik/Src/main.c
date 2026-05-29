@@ -21,11 +21,12 @@
 
 uint16_t convertToRgb16(RGBTRIPLE farben){
 		uint16_t farbe;
-		farbe = (farben.rgbtRed >> 3 );
-		farbe |= (farben.rgbtGreen >> 2 );
+		farbe = (farben.rgbtRed >> 3 ) << 11;
+		farbe |= (farben.rgbtGreen >> 2 ) << 5;
 		farbe |= (farben.rgbtBlue>> 3 );
 		return farbe;
 	}
+	
 
 int main(void) {
 	initITSboard(); // Initialisierung des ITS Boards
@@ -45,16 +46,19 @@ int main(void) {
 	int x = 1;
 	int y = 1;
 	RGBTRIPLE farben;
+	BITMAPFILEHEADER FileHeader;
+	BITMAPINFOHEADER InfoHeader;
 	// Test in Endlosschleife
+	COMread((char*)&FileHeader,sizeof(FileHeader),1); // bracuht noch einen errohandler 
+	COMread((char*)&InfoHeader,sizeof(InfoHeader),1);	
 	while(1) {
-		
 		
 		for( int i = 0;i <= 9 ;i++){
 			nextChar();
 
 		}
 		int start = nextChar();
-		for( int i = 0;i <= start-10 ;i++){
+		for( int i = 0;i <= start- 0xA ;i++){
 			nextChar();
 
 		}
