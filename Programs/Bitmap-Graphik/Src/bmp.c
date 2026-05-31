@@ -110,9 +110,9 @@ static void clearLineBuffer(COLOR *buffer, int size) {
  * @brief Liest den BMP-Dateiheader und prüft die Signatur.
  */
 static int readFileHeader(void) {
-    size_t bytesRead = COMread((char *)&fileHeader, sizeof(BITMAPFILEHEADER), 1);
-    RETURN_NOK_ON_ERR(bytesRead != 1,           "konnte nicht gelesen werden");
-    RETURN_NOK_ON_ERR(fileHeader.bfType != BMP_SIGNATURE, "BMP-Datei ist nicht bgültig");
+    int bytesRead = COMread((char *)&fileHeader, sizeof(BITMAPFILEHEADER), 1);
+    RETURN_NOK_ON_ERR(bytesRead != 1, "FileHeader konnte nicht gelesen werden!");
+    RETURN_NOK_ON_ERR(fileHeader.bfType != BMP_SIGNATURE, "Dateiformat wird nicht erkannt – kein BMP!");
     return EOK;
 }
 
@@ -123,16 +123,15 @@ static int readFileHeader(void) {
  * (unkomprimiert oder RLE8).
  */
 static int readInfoHeader(void) {
-    size_t bytesRead = COMread((char *)&infoHeader, sizeof(BITMAPINFOHEADER), 1);
-    RETURN_NOK_ON_ERR(bytesRead != 1, "InfoHeader konnte nichjt gelesen werden");
+    int bytesRead = COMread((char *)&infoHeader, sizeof(BITMAPINFOHEADER), 1);
+    RETURN_NOK_ON_ERR(bytesRead != 1, "InfoHeader konnte nicht gelesen werden!");
     RETURN_NOK_ON_ERR(infoHeader.biCompression != BI_RGB &&
                       infoHeader.biCompression != BI_RLE8,
-                      "Kompression ist nicht unterstützte ");
-    
+                      "Kompression wird nicht unterstützt!");
     RETURN_NOK_ON_ERR(infoHeader.biBitCount != 8 && infoHeader.biBitCount != 24,
-                      "Farbtiefe ist nicht 8 oder 24 bit");
+                      "Farbtiefe ist nicht 8 oder 24 bit!");
     RETURN_NOK_ON_ERR(infoHeader.biSize != BMP_INFOHEADER_SIZE,
-                      "InfoHeader-Größe Ungülltig");
+                      "InfoHeader-Größe ungültig!");
     return EOK;
 }
 
@@ -151,12 +150,10 @@ static int palletteAuslesen(void) {
         return ERROR_BMP_MEMORY;
     }
 
-    size_t bytesRead = COMread((char *)palette, sizeof(RGBQUAD), numColors);
-    RETURN_NOK_ON_ERR(bytesRead != numColors, "Fehler beim Einlesen der Farbtabelle!");
-
+    int bytesRead = COMread((char *)palette, sizeof(RGBQUAD), numColors);
+    RETURN_NOK_ON_ERR((uint32_t)bytesRead != numColors, "Farbtabelle konnte nicht eingelesen werden!");
     return EOK;
 }
-
 /**
  * @brief Gibt den Palettenspeicher frei und setzt den Zeiger zurück.
  */
@@ -325,9 +322,70 @@ static int decodeUncompressed(void) {
     return EOK;
 }
 
+/**
+ * @brief Gibt jeden Pixel einzeln über GUI_drawPoint auf dem Display aus.
+ *
+ * Teilaufgabe a: einfachste Variante ohne Zeilenpuffer. Für jeden Pixel wird
+ * GUI_drawPoint aufgerufen — langsam, aber direkt und leicht nachvollziehbar.
+ *
+ * Unterstützt: 8-bit palettiert (unkomprimiert) und 24-bit RGB.
+ * RLE8-Kompression wird in dieser Variante nicht unterstützt.
+ */
+static int decodePixelByPixel(void) {
+    int bytesPerPixel = infoHeader.biBitCount / BITS_PER_BYTE;
+    int padding       = reihenPadding(bytesPerPixel);
+
+    for (int row = 0; row < infoHeader.biHeight; row++) {
+        int displayY = (infoHeader.biHeight - 1) - row;
+
+        for (int col = 0; col < infoHeader.biWidth; col++) {
+            uint16_t color = nächstenPixelColor(infoHeader.biBitCount);
+
+            bool xInRange = (col      < DISPLAY_HEIGHT);
+            bool yInRange = (displayY >= 0 && displayY < DISPLAY_WIDTH);
+
+            if (xInRange && yInRange) {
+                Coordinate pos = {(uint16_t)col, (uint16_t)displayY};
+                GUI_drawPoint(pos, color, DOT_PIXEL_1X1, DOT_FILL_AROUND);
+            }
+        }
+
+        for (int i = 0; i < padding; i++) {
+            nextChar();
+        }
+    }
+
+    return EOK;
+}
+
 /* -------------------------------------------------------------------------
  * Öffentliche Funktion
  * ---------------------------------------------------------------------- */
+/**
+ * @brief Lädt und zeigt das nächste BMP-Bild auf dem Display an (Teilaufgabe a).
+ *
+ * Verwendet GUI_drawPoint – einfach, aber langsam.
+ * Für die schnelle Variante (Teilaufgabe b) siehe bmp_displayNext().
+ */
+void bmp_displayNext_a(void) {
+    GUI_clear(WHITE);
+    openNextFile();
+ 
+    if (readFileHeader()     != EOK) return;
+    if (readInfoHeader()     != EOK) return;
+    if (dimensionenChecken() != EOK) return;
+ 
+    if (infoHeader.biBitCount == 8) {
+        if (palletteAuslesen() != EOK) {
+            paletteFreien();
+            return;
+        }
+    }
+ 
+    decodePixelByPixel();
+ 
+    paletteFreien();
+}
 
 /**
  * @brief Lädt und zeigt das nächste BMP-Bild auf dem Display an.
@@ -335,7 +393,7 @@ static int decodeUncompressed(void) {
  * Liest Header, Palette (bei 8-bit) und Pixeldaten über die serielle
  * Schnittstelle. Gibt nach der Darstellung alle Ressourcen frei.
  */
-void bmp_displayNext(void) {
+void bmp_displayNext_b(void) {
     GUI_clear(WHITE);
     openNextFile();
 

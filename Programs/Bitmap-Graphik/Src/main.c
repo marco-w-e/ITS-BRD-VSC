@@ -31,7 +31,7 @@ int main(void) {
 	while(1) 
 	{
 		lcdGotoXY(10, 10);
-		bmp_displayNext();
+		bmp_displayNext_b();
 		wartenBisKnopfDruck();
 	}
 
