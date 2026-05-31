@@ -21,8 +21,8 @@
  * Konstanten
  * ---------------------------------------------------------------------- */
 
-#define DISPLAY_HEIGHT      480
-#define DISPLAY_WIDTH       320
+#define DISPLAY_WIDTH      480
+#define DISPLAY_HEIGHT      320
 #define BMP_PALETTE_SIZE    256
 #define BMP_SIGNATURE       0x4D42  // 'BM' als Little-Endian-Wert
 #define BMP_INFOHEADER_SIZE 40      // Standard BITMAPINFOHEADER (40 Byte)
@@ -61,13 +61,14 @@ static uint16_t colorFromPaletteIndex(uint8_t index) {
     );
 }
 
-/**
- * @brief Liest eine Farbe direkt aus einem 24-bit RGB-Pixel.
- */
-static uint16_t colorFromRGBTriple(RGBTRIPLE *pixel) {
-    return toRGB565(pixel->rgbtRed, pixel->rgbtGreen, pixel->rgbtBlue);
-}
 
+uint16_t convertToRgb16(RGBTRIPLE farben){
+		uint16_t farbe;
+		farbe = (farben.rgbtRed >> 3 ) << 11;
+		farbe |= (farben.rgbtGreen >> 2 ) << 5;
+		farbe |= (farben.rgbtBlue>> 3 );
+		return farbe;
+	}
 /* -------------------------------------------------------------------------
  * Zeilenpuffer-Hilfsfunktionen
  * ---------------------------------------------------------------------- */
@@ -80,7 +81,7 @@ static uint16_t colorFromRGBTriple(RGBTRIPLE *pixel) {
  * @param y           Y-Koordinate (Displayzeile).
  */
 static void flushLineBuffer(COLOR *buffer, int pixelCount, int y) {
-    bool yInRange     = (y >= 0 && y < DISPLAY_WIDTH);
+    bool yInRange     = (y >= 0 && y < DISPLAY_HEIGHT);
     bool hasPixels    = (pixelCount > 0);
 
     if (!hasPixels || !yInRange) {
@@ -88,8 +89,8 @@ static void flushLineBuffer(COLOR *buffer, int pixelCount, int y) {
     }
 
     Coordinate start = {0, (uint16_t)y};
-    LENGTH length    = (pixelCount < DISPLAY_HEIGHT) ? (LENGTH)pixelCount
-                                                      : DISPLAY_HEIGHT;
+    LENGTH length    = (pixelCount < DISPLAY_WIDTH) ? (LENGTH)pixelCount
+                                                      : DISPLAY_WIDTH;
     GUI_WriteLine(start, length, buffer);
 }
 
@@ -141,9 +142,13 @@ static int readInfoHeader(void) {
  * Die Anzahl der Einträge ergibt sich aus biClrUsed (oder 256, falls 0).
  */
 static int palletteAuslesen(void) {
-    uint32_t numColors = (infoHeader.biClrUsed == 0)
-                         ? BMP_PALETTE_SIZE
-                         : infoHeader.biClrUsed;
+    uint32_t numColors;
+    
+    if (infoHeader.biClrUsed == 0) { // 0 Bedeutet die Standard anzahl der fareben werden benutz also 256
+        numColors = BMP_PALETTE_SIZE;
+    } else {
+        numColors = infoHeader.biClrUsed;
+    }
 
     palette = (RGBQUAD *)malloc(numColors * sizeof(RGBQUAD));
     if (palette == NULL) {
@@ -162,20 +167,6 @@ static void paletteFreien(void) {
     palette = NULL;
 }
 
-/* -------------------------------------------------------------------------
- * Validierung
- * ---------------------------------------------------------------------- */
-
-/**
- * @brief Prüft, ob die Bildmaße die Displaygrenzen einhalten.
- */
-static int dimensionenChecken(void) {
-    if (infoHeader.biWidth  > DISPLAY_HEIGHT ||
-        infoHeader.biHeight > DISPLAY_WIDTH) {
-        return ERROR_BMP_SIZE_LIMIT;
-    }
-    return EOK;
-}
 
 /* -------------------------------------------------------------------------
  * Pixeldekodierung – RLE8
@@ -187,8 +178,8 @@ static int dimensionenChecken(void) {
  * Verarbeitet Wiederholungs-, Escape- und absoluten Modus gemäß BMP-Standard.
  */
 static int decodeRLE8(void) {
-    COLOR lineBuffer[DISPLAY_HEIGHT];
-    clearLineBuffer(lineBuffer, DISPLAY_HEIGHT);
+    COLOR lineBuffer[DISPLAY_WIDTH];
+    clearLineBuffer(lineBuffer, DISPLAY_WIDTH);
 
     int  x         = 0;
     int  y         = infoHeader.biHeight - 1;  // BMP ist von unten nach oben gespeichert
@@ -202,7 +193,7 @@ static int decodeRLE8(void) {
             /* --- Wiederholungsmodus: 'count' Pixel mit Farbe 'value' --- */
             uint16_t color = colorFromPaletteIndex(value);
             for (int i = 0; i < count; i++) {
-                if (x < DISPLAY_HEIGHT) {
+                if (x < DISPLAY_WIDTH) {
                     lineBuffer[x] = color;
                 }
                 x++;
@@ -212,7 +203,7 @@ static int decodeRLE8(void) {
             switch (value) {
                 case 0:  /* Zeilenende (EOL) */
                     flushLineBuffer(lineBuffer, x, y);
-                    clearLineBuffer(lineBuffer, DISPLAY_HEIGHT);
+                    clearLineBuffer(lineBuffer, DISPLAY_WIDTH);
                     x = 0;
                     y--;
                     break;
@@ -231,7 +222,7 @@ static int decodeRLE8(void) {
                     for (int i = 0; i < value; i++) {
                         uint8_t  index = nextChar();
                         uint16_t color = colorFromPaletteIndex(index);
-                        if (x < DISPLAY_HEIGHT) {
+                        if (x < DISPLAY_WIDTH) {
                             lineBuffer[x] = color;
                         }
                         x++;
@@ -279,7 +270,7 @@ static uint16_t nächstenPixelColor(int bitDepth) {
     /* 24-bit */
     RGBTRIPLE pixel;
     COMread((char *)&pixel, sizeof(RGBTRIPLE), 1);
-    return colorFromRGBTriple(&pixel);
+    return convertToRgb16(pixel);
 }
 
 /**
@@ -291,10 +282,15 @@ static uint16_t nächstenPixelColor(int bitDepth) {
 static int decodeUncompressed(void) {
     int   bytesPerPixel = infoHeader.biBitCount / BITS_PER_BYTE;
     int   padding       = reihenPadding(bytesPerPixel);
-    int   drawWidth     = (infoHeader.biWidth < DISPLAY_HEIGHT)
-                          ? infoHeader.biWidth
-                          : DISPLAY_HEIGHT;
-    COLOR lineBuffer[DISPLAY_HEIGHT];
+    int drawWidth;
+
+    if (infoHeader.biWidth < DISPLAY_WIDTH) {
+        drawWidth = infoHeader.biWidth;
+    } else {
+        drawWidth = DISPLAY_WIDTH;
+    }
+    
+    COLOR lineBuffer[DISPLAY_WIDTH];
 
     for (int row = 0; row < infoHeader.biHeight; row++) {
         /* BMP-Zeile 0 = unterste Bildzeile → Display von oben */
@@ -341,8 +337,8 @@ static int decodePixelByPixel(void) {
         for (int col = 0; col < infoHeader.biWidth; col++) {
             uint16_t color = nächstenPixelColor(infoHeader.biBitCount);
 
-            bool xInRange = (col      < DISPLAY_HEIGHT);
-            bool yInRange = (displayY >= 0 && displayY < DISPLAY_WIDTH);
+            bool xInRange = (col      < DISPLAY_WIDTH);
+            bool yInRange = (displayY >= 0 && displayY < DISPLAY_HEIGHT);
 
             if (xInRange && yInRange) {
                 Coordinate pos = {(uint16_t)col, (uint16_t)displayY};
@@ -373,7 +369,6 @@ void bmp_displayNext_a(void) {
  
     if (readFileHeader()     != EOK) return;
     if (readInfoHeader()     != EOK) return;
-    if (dimensionenChecken() != EOK) return;
  
     if (infoHeader.biBitCount == 8) {
         if (palletteAuslesen() != EOK) {
@@ -399,7 +394,6 @@ void bmp_displayNext_b(void) {
 
     if (readFileHeader()    != EOK) return;
     if (readInfoHeader()    != EOK) return;
-    if (dimensionenChecken()!= EOK) return;
 
     /* Farbtabelle nur bei palettierten Bildern einlesen */
     if (infoHeader.biBitCount == 8) {
