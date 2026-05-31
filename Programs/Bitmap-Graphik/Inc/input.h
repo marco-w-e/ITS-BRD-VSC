@@ -33,7 +33,7 @@ extern int nextChar(void);
 * @param  count Number of data elements
 * @retval Number of items read. If not enough data are available, EOF will be returned.
 */
-extern int COMread(char*, unsigned int size, unsigned int count);
+extern int COMread(char* buf, unsigned int size, unsigned int count);
 
 #endif
 // EOF

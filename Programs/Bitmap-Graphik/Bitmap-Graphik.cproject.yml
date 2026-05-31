@@ -183,10 +183,11 @@ project:
       files:
         - file: ../../ITS_BRD_LIB/Inc/lcd.h
         - file: Inc/input.h
-        - file: farben.h
         - file: Inc/BMP_types.h
         - file: Inc/errorhandler.h
         - file: Inc/MS_basetypes.h
+        - file: Inc/bmp.h
+        - file: Inc/button.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
@@ -195,6 +196,8 @@ project:
         - file: Src/errorhandler.c
         - file: Src/input.c
         - file: Src/perfTimer.c
+        - file: Src/bmp.c
+        - file: button.c
 
   components:
     - component: ARM::CMSIS:CORE
