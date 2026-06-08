@@ -182,7 +182,7 @@ project:
     - group: Program/User/Inc
       files:
         - file: ../../ITS_BRD_LIB/Inc/lcd.h
-        - file: Output.h
+        - file: Inc/Output.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
