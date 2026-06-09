@@ -16,11 +16,13 @@
 #include "additionalFonts.h"
 #include "error.h"
 #include "Output.h"
+#include "Input.h"
+#include "timer.h"
 
 
 int main(void) {
 	initITSboard();    // Initialisierung des ITS Boards
-	
+	initTimer();
 	GUI_init(DEFAULT_BRIGHTNESS);   // Initialisierung des LCD Boards mit Touch
 	TP_Init(false);                 // Initialisierung des LCD Boards mit Touch
 
@@ -30,9 +32,9 @@ int main(void) {
 	// Test in Endlosschleife
 	while(1) {
 		pd0High();
-		HAL_Delay(10000);
+		impulsDelay(100000 * TICKS_PER_US);
 		pd0Low();
-		HAL_Delay(10000);
+		impulsDelay(100000 * TICKS_PER_US);
 	}
 }
 
