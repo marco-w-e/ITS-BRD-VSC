@@ -25,7 +25,7 @@ GPIOD->MODER |=  (1U << (2));
 //pd1 push pull mode 
 GPIOD->OTYPER &= ~(1U << 1);
 pd1High();
-
+//pd0
 GPIOD->MODER &= ~(3U << (1)); 
 GPIOD->MODER |=  (1U << (1));
 //opendrain
@@ -45,23 +45,7 @@ TIM2 -> CR1 &= ~1U;
 return 1;
 }
 
-int reset(){
-    uint8_t praesenz = 0;
 
-    pd0Low();
-    impulsDelay(RESET_LOW);        
 
-    pd0High();
-    impulsDelay(RESET_RELEASE);   
-
-    praesenz = (GPIOD->IDR >> PIN) & 0x01;  
-
-    impulsDelay(RESET_QUERY);   
-
-    if (praesenz == 1) {
-        return -1;  // Kein Sensor angeschlossen 
-    }
-
-    return 0;  // Sensor vorhanden 
-}
+ 
 // EOF

@@ -40,7 +40,10 @@ int pd0Low(void);
 int oneWireSetup(void);
 
 int impulsDelay(uint32_t Microsek);
+
 int resetImpuls();
+
+int reset();
 
 #endif
 // EOF
