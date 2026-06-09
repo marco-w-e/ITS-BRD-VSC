@@ -412,7 +412,6 @@ CompileFlags:
     - "-D__thumb2__=1\r\n"
     - "-D__thumb__=1\r\n"
     - '-D__ARMCOMPILER_LIBCXX=1'
-    - '-IC:/Users/marco/ITS-BRD-VSC/Programs/One-Wire-Bus/Inc'
     - >-
       -IC:/Users/marco/ITS-BRD-VSC/Programs/One-Wire-Bus/../../stm32cubef4/Drivers/CMSIS/Device/ST/STM32F4xx/Include
     - >-
@@ -435,4 +434,4 @@ CompileFlags:
     - >-
       -IC:/Users/marco/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
     - '-IC:/Users/marco/ITS-BRD-VSC/Programs/One-Wire-Bus/../../ITS_BRD_LIB/Inc'
-    - '-IC:/Users/marco/ITS-BRD-VSC/Programs/One-Wire-Bus/.'
+    - '-IC:/Users/marco/ITS-BRD-VSC/Programs/One-Wire-Bus/Inc'

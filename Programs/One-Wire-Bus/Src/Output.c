@@ -1,7 +1,9 @@
 #include "stm32f4xx_hal.h"
+#include <cstdint>
 
-
-
+#define TICKS_PER_US 90
+#define T60MICROS (60 * TICKS_PER_US)
+#define T480MICORS (480 * TICKS_PER_US)
 
 
 int pd1High(void){
@@ -30,6 +32,13 @@ GPIOD->MODER |=  (1U << (1));
 GPIOD->OTYPER |= (1U << 0);
 
 pd0High();
+return 1;
+}
+
+int impulsDelay(int){
+
+
+
 
 }
 
