@@ -1,29 +1,8 @@
 #include "stm32f4xx_hal.h"
 #include "timer.h"
+#include "output.h"
 #include <stdint.h>
 
-#define TICKS_PER_US 90
-#define T60MICROS (60 * TICKS_PER_US)
-#define T480MICORS (480 * TICKS_PER_US)
-
-/* --- Schreibe "1" --- */
-#define WRITE_ONE_LOW           (6 * TICKS_PER_US)     /* Bus auf Low halten        */
-#define WRITE_ONE_HIGH          (64 * TICKS_PER_US)   /* Bus freigeben, dann warten */
-
-/* --- Schreibe "0" --- */
-#define WRITE_ZERO_LOW          (60 * TICKS_PER_US)   /* Bus auf Low halten        */
-#define WRITE_ZERO_RELEASE      (10 * TICKS_PER_US)   /* Bus freigeben, dann warten */
-
-/* --- Lese Bit --- */
-#define READ_LOW            (6 * TICKS_PER_US)  /* Bus auf Low halten        */
-#define READ_RELEASE        (9 * TICKS_PER_US)  /* Bus freigeben, warten     */
-#define READ_SAMPLE        (55 * TICKS_PER_US)  /* Busabfrage + warten       */
-
-
-/* --- Reset --- */
-#define RESET_LOW         (480 * TICKS_PER_US)  /* Bus auf Low halten        */
-#define RESET_RELEASE      (70  * TICKS_PER_US) /* Bus freigeben, warten     */
-#define RESET_QUERY       (410 * TICKS_PER_US)   /* Busabfrage + warten       */
 
 
 
@@ -66,11 +45,23 @@ TIM2 -> CR1 &= ~1U;
 return 1;
 }
 
-int resetImpuls(){
-pd0Low();
-impulsDelay(RESET_LOW);
-pd0High();
-    
-}
+int reset(){
+    uint8_t praesenz = 0;
 
+    pd0Low();
+    impulsDelay(RESET_LOW);        
+
+    pd0High();
+    impulsDelay(RESET_RELEASE);   
+
+    praesenz = (GPIOD->IDR >> PIN) & 0x01;  
+
+    impulsDelay(RESET_QUERY);   
+
+    if (praesenz == 1) {
+        return -1;  // Kein Sensor angeschlossen 
+    }
+
+    return 0;  // Sensor vorhanden 
+}
 // EOF

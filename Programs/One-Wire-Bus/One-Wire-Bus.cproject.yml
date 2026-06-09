@@ -184,6 +184,7 @@ project:
         - file: ../../ITS_BRD_LIB/Inc/lcd.h
         - file: Inc/Output.h
         - file: Inc/Input.h
+        - file: fehler.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
