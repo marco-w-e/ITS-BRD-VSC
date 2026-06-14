@@ -185,6 +185,7 @@ project:
         - file: Inc/Output.h
         - file: Inc/Input.h
         - file: fehler.h
+        - file: Inc/Typs.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src

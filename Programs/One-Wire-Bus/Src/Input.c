@@ -1,9 +1,10 @@
+#include <locale.h>
 #include <stdint.h>
 #include "Output.h"
 #include "timer.h"
 #include "fehler.h"
-
-
+#include "Typs.h"
+#include "Input.h"
 
 
 int read(uint8_t *input){
@@ -13,7 +14,7 @@ int read(uint8_t *input){
     }
 
 pd0Low();
-impulsDelay(READ_SAMPLE);
+impulsDelay(READ_LOW);
 
 pd0High();
 impulsDelay(READ_RELEASE);
@@ -21,32 +22,62 @@ impulsDelay(READ_RELEASE);
 *input = (GPIOD->IDR >> PIN) & 0x01;
 
 impulsDelay(READ_SAMPLE);
-return 1;
+return WORKING;
 }
 
-
-
-
-int rom_read(uint64_t *rom)
+int read_byte(uint8_t *byte)
 {
-    if (rom == NULL) {
+    if (byte == NULL) {
         return -1;
     }
 
-    *rom = 0;
+    *byte = 0;
 
-    for (uint8_t i = 0; i < 64; i++) {
+    for (uint8_t i = 0; i < 8; i++) {
         uint8_t bit = 0;
 
-        if (read(&bit) != 1) {
-            return -1;
-        }
+        pd0Low();
+        impulsDelay(READ_LOW);
+        pd0High();
+        impulsDelay(READ_RELEASE);
+        bit = (GPIOD->IDR >> PIN) & 0x01;
+        impulsDelay(READ_SAMPLE);
 
-        *rom |= ((uint64_t)bit << i);
+        *byte |= (bit << i);  
     }
 
-    return 1;
+    return WORKING;
 }
+
+
+
+
+int rom_read(uint8_t *rom)
+{
+    if (rom == NULL)
+        return -1;
+
+    for (int i = 0; i < 8; i++)
+    {
+        rom[i] = 0;
+    }
+
+    for (uint8_t i = 0; i < 8; i++)
+    {
+        for (uint8_t j = 0; j < 8; j++)
+        {
+            uint8_t bit;
+
+            if (read(&bit) != WORKING)
+                return -1;
+
+            rom[i] |= (bit << j);
+        }
+    }
+
+    return WORKING;
+}
+
 
 int reset(){
     uint8_t praesenz = 0;
@@ -65,7 +96,7 @@ int reset(){
         return -1;  // Kein Sensor angeschlossen 
     }
 
-    return 0;  // Sensor vorhanden 
+    return WORKING;  // Sensor vorhanden 
 }
 
 int write_bit(uint8_t bit)
@@ -91,17 +122,103 @@ int write_bit(uint8_t bit)
     else{
         return -1;
     }
- return 1;
+ return WORKING;
 }
 
 int write_byte(uint8_t byte)
 {
     for (uint8_t i = 0; i < 8; i++){
-        if (write_bit((byte >> i) & 0x01) != 0) {
+       uint8_t temp = byte;
+        if (write_bit((temp >> i) & 0x01) != 1) {
             return -1;
         }
 
     }
-        return 0;
+        return WORKING;
 
 }
+
+uint8_t crc_berechnen(uint8_t *daten, uint8_t laenge)
+{
+    uint8_t crc = 0;
+
+    for (uint8_t i = 0; i < laenge; i++)
+    {
+        uint8_t byte = daten[i];
+
+        for (uint8_t j = 0; j < 8; j++)
+        {
+            uint8_t d = (crc ^ byte) & 0x01;
+
+            crc >>= 1;
+
+            if (d)
+                crc ^= 0x8C;
+
+            byte >>= 1;
+        }
+    }
+
+    return crc;
+}
+
+int crc_pruefen(uint8_t *rom, uint8_t laenge)
+{
+    if (rom == NULL)
+        return -1;
+
+    if (laenge < 2)
+        return -1;
+
+    uint8_t crc = crc_berechnen(rom, laenge - 1);
+
+    if (crc != rom[laenge - 1])
+        return -1;
+
+    return WORKING;
+}
+
+int temperatur_lesen(uint8_t *sensor_rom, float *temperatur){
+
+    if (temperatur == NULL){
+
+        return -1;
+    }
+    
+    //MEssung
+    reset(); // Checken Ob Sensor vorhanden ist.
+    write_byte(MATCH_ROM);
+    for(uint8_t i = 0; i < 8; i++){
+         write_byte(sensor_rom[i]);
+        
+        
+        
+    }
+    write_byte(CONVER_T);
+    pd1High();           
+    impulsDelay(750000);
+
+
+
+    reset();
+    write_byte(MATCH_ROM);
+    for(uint8_t i = 0; i < 8; i++){
+         write_byte(sensor_rom[i]);
+    }
+    write_byte(READ_SPAD);
+    uint8_t scratchpad[9];
+    for (uint8_t i = 0; i < 9; i++) {
+        read_byte(&scratchpad[i]);
+    }
+
+    if(crc_pruefen(scratchpad, 9) != WORKING){
+        return -1;
+    };
+
+    int16_t rohwert = (int16_t)((scratchpad[1] << 8) | scratchpad[0]);
+    *temperatur = rohwert / 16.0f;
+
+    return WORKING;
+
+
+};

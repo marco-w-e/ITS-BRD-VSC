@@ -29,6 +29,7 @@
 #define RESET_QUERY       (410 * TICKS_PER_US)   /* Busabfrage + warten       */
 
 
+
 int oneWireSetup(void);
 
 int pd1High(void);
