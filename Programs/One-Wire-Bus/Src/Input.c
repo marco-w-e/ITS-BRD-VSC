@@ -129,7 +129,7 @@ int write_byte(uint8_t byte)
 {
     for (uint8_t i = 0; i < 8; i++){
        uint8_t temp = byte;
-        if (write_bit((temp >> i) & 0x01) != 1) {
+        if (write_bit((temp >> i) & 0x01) != WORKING) {
             return -1;
         }
 
@@ -152,8 +152,11 @@ uint8_t crc_berechnen(uint8_t *daten, uint8_t laenge)
 
             crc >>= 1;
 
-            if (d)
+            if (d){
+
                 crc ^= 0x8C;
+            }
+                
 
             byte >>= 1;
         }
@@ -194,10 +197,12 @@ int temperatur_lesen(uint8_t *sensor_rom, float *temperatur){
         
         
     }
-    write_byte(CONVER_T);
-    pd1High();           
-    impulsDelay(750000);
-
+    
+    write_byte(CONVER_T);  
+    GPIOD->OTYPER &= ~(1U << 0);     
+    impulsDelay(750000 * 90);
+    GPIOD->OTYPER |= (1U << 0);
+           
 
 
     reset();
@@ -205,6 +210,7 @@ int temperatur_lesen(uint8_t *sensor_rom, float *temperatur){
     for(uint8_t i = 0; i < 8; i++){
          write_byte(sensor_rom[i]);
     }
+   
     write_byte(READ_SPAD);
     uint8_t scratchpad[9];
     for (uint8_t i = 0; i < 9; i++) {

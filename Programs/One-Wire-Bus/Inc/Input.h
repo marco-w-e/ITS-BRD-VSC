@@ -10,6 +10,7 @@
 #define READ_ROM        0x33
 #define READ_SPAD       0xBE
 
+#define TEMP_TIME       (410 * 90)   /* Busabfrage + warten       */
 
 
 

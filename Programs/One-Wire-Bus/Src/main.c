@@ -99,7 +99,7 @@ int main(void) {
 
 	
 
-	// Test in Endlosschleife
+	//Test in Endlosschleife
 	while(1) {
 		float temperatur = 0.0f;
 	if(temperatur_lesen(rom, &temperatur) != WORKING){
@@ -108,7 +108,7 @@ int main(void) {
 		snprintf(str, sizeof(str), "tmp: %f", temperatur);
     lcdPrintReplS(str);
 	}
-	impulsDelay(1000000);
+	impulsDelay(1000000 * 90);
 
 	
 		

@@ -31,8 +31,8 @@ GPIOD->MODER &= ~(3U << (0));
 GPIOD->MODER |=  (1U << (0));
 //opendrain
 GPIOD->OTYPER |= (1U << 0);
-
 pd0High();
+
 return WORKING;
 }
 
