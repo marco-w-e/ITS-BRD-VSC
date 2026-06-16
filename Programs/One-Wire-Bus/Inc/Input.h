@@ -33,6 +33,7 @@ int crc_pruefen(uint8_t *daten, uint8_t laenge);
 int read_byte(uint8_t *byte);
 
 int temperatur_lesen(uint8_t *sensor_rom, float *temperatur);
+int OW_search(void);
 
 #endif
 // EOF

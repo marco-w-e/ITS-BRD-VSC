@@ -5,6 +5,7 @@
 #include "fehler.h"
 #include "Typs.h"
 #include "Input.h"
+#include "lcd.h"
 
 
 int read(uint8_t *input){
@@ -228,3 +229,33 @@ int temperatur_lesen(uint8_t *sensor_rom, float *temperatur){
 
 
 };
+int OW_search(){
+uint8_t id_Byte;
+uint8_t comp_Byte;
+
+uint64_t ROM_NUM;
+uint8_t Lastdiscrepans;
+uint8_t last_zero;
+uint8_t search_di;
+uint8_t LastDeviceFlag;
+if(reset()!= WORKING){lcdPrintS("Kein sensor!\n");};
+write_byte(0xF0);
+for(int i =0;i<64;i++){
+    read(&id_Byte);
+    read(&comp_Byte);
+    if(id_Byte == comp_Byte == 1)return -1;
+    if(id_Byte == comp_Byte == 0){
+
+    }
+    search_di = id_Byte;
+    ROM_NUM |= (search_di  << i);
+
+    
+}
+if (Lastdiscrepans == 0) {
+
+}else {
+LastDeviceFlag =1;
+}
+
+}
