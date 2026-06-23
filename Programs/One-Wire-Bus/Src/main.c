@@ -102,11 +102,39 @@ int main(void) {
     }
 
 	*/
-	 write_byte(0xF0);
+	
      
-	OW_search(ROM_NUM_1, &LastDeviceFlag, &Lastdiscrepans);
+	int s = OW_searcht(ROM_NUM_1, &LastDeviceFlag, &Lastdiscrepans);
+    snprintf(fam, sizeof(fam), "Fam: %u", ROM_NUM_1[0]);
+    lcdPrintS(fam);
+    lcdPrintS("\n");
+
+    lcdPrintS("Serial: ");
+    for (int i = 1; i < 7; i++)
+    {
+        snprintf(serial, sizeof(serial), "%u ", ROM_NUM_1[i]);
+        lcdPrintS(serial);
     
-	OW_search(ROM_NUM_2, &LastDeviceFlag, &Lastdiscrepans);
+	}
+	snprintf(str, sizeof(str), "CRC: %u", ROM_NUM_1[7]);
+    lcdPrintS(str);
+    lcdPrintS("\n");
+    int p = OW_searcht(ROM_NUM_1, &LastDeviceFlag, &Lastdiscrepans);
+	
+    snprintf(fam, sizeof(fam), "Fam: %u", ROM_NUM_1[0]);
+    lcdPrintS(fam);
+    lcdPrintS("\n");
+
+    lcdPrintS("Serial: ");
+    for (int i = 1; i < 7; i++)
+    {
+        snprintf(serial, sizeof(serial), "%u ", ROM_NUM_1[i]);
+        lcdPrintS(serial);
+    
+	}
+	snprintf(str, sizeof(str), "CRC: %u", ROM_NUM_1[7]);
+    lcdPrintS(str);
+    lcdPrintS("\n");
 
 
 	//Test in Endlosschleife😮🥺

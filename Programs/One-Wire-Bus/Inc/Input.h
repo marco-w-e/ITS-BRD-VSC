@@ -37,6 +37,9 @@ int temperatur_lesen(uint8_t *sensor_rom, float *temperatur);
 
 int OW_search(uint8_t *ROM_NUM,uint8_t *LastDeviceFlag,uint8_t *Lastdiscrepans);
 
+int OWFirst(int LastDiscrepancy,int LastDeviceFlag);
+int OW_searcht(uint8_t *ROM_NUM,uint8_t *LastDeviceFlag,uint8_t *Lastdiscrepans);
+
 #endif
 // EOF
 
