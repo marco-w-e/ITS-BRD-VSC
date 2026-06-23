@@ -31,14 +31,14 @@ int main(void) {
 	GUI_init(DEFAULT_BRIGHTNESS);   // Initialisierung des LCD Boards mit Touch
 	TP_Init(false);
    oneWireSetup();
-
+   
    
 	                 // Initialisierung des LCD Boards mit Touch
     uint8_t rom[8];
-	uint8_t ROM_NUM_1[8] = { 0x28, 0xA7, 0x6D, 0xE6, 0x01, 0x00, 0x00, 0xD1 };
-	uint8_t ROM_NUM_2[8] = { 0x28, 0x7D, 0x6D, 0xE6, 0x01, 0x00, 0x00, 0xDA };
-	uint8_t ROM_NUM_3[8] = { 0x28, 0x64, 0x35, 0x89, 0x0D, 0x00, 0x00, 0x0D };
-	uint8_t ROM_NUM_4[8] = { 0x28, 0x4E, 0x62, 0x89, 0x0D, 0x00, 0x00, 0x0C };
+	uint8_t ROM_NUM_1[8] ;
+	uint8_t ROM_NUM_2[8] ;
+	uint8_t ROM_NUM_3[8] ;
+	uint8_t ROM_NUM_4[8] ;
 
     uint8_t romCommand = 0x33;
 
@@ -46,11 +46,15 @@ int main(void) {
 
     char str[16];
     char serial[16];
-    char fam[16];
+    char fam[16]; 
+    float oldtem  = 0;
+    uint8_t ROM_NUM[8];
+    uint8_t Lastdiscrepans = 0;
+    uint8_t LastDeviceFlag = 0;
 
-
+/*
   // Begruessungstext	
-	fehler = reset();
+	fehler = reset();;
 	
 	    // ROM Command
     write_byte(romCommand);
@@ -97,19 +101,31 @@ int main(void) {
         sensor_rom |= ((uint64_t)rom[i] << (i * 8));
     }
 
-	
+	*/
+	 write_byte(0xF0);
+     
+	OW_search(ROM_NUM_1, &LastDeviceFlag, &Lastdiscrepans);
+    
+	OW_search(ROM_NUM_2, &LastDeviceFlag, &Lastdiscrepans);
 
-	//Test in Endlosschleife
+
+	//Test in Endlosschleife😮🥺
 	while(1) {
 		float temperatur = 0.0f;
+        
 	if(temperatur_lesen(rom, &temperatur) != WORKING){
 		            lcdPrintS("Mess Fehler!\n");
 	} else {
 		snprintf(str, sizeof(str), "tmp: %f", temperatur);
-    lcdPrintReplS(str);
-	}
+        
+        if(temperatur != oldtem){
+             lcdGotoXY(5, 5);
+            lcdPrintReplS(str);
+        }
+        
+	} 
 	impulsDelay(1000000 * 90);
-
+    float oldtem =temperatur;
 	
 		
 	}

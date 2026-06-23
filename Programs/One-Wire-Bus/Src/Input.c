@@ -229,46 +229,50 @@ int temperatur_lesen(uint8_t *sensor_rom, float *temperatur){
 
 
 };
-int OW_search(){
+int OW_search(uint8_t *ROM_NUM,uint8_t *LastDeviceFlag,uint8_t *Lastdiscrepans){
 uint8_t id_Byte;
 uint8_t comp_Byte;
-// i der index von der vorschleife enspricht id bit number
-uint8_t ROM_NUM[8];
-uint8_t Lastdiscrepans = 0;
+// i der index von der vorschleife enspricht id bit numbe
+
 uint8_t last_zero;
 uint8_t search_di;
-uint8_t LastDeviceFlag = 0;
+
 uint8_t LastFamdiscrepan = 0;
+
 if(reset()!= WORKING){lcdPrintS("Kein sensor!\n");};
-write_byte(0xF0);
-for(int i =0;i<64;i++){
-    read(&id_Byte);
-    read(&comp_Byte);
-    if(id_Byte == comp_Byte == 1)return -1;
-    if(id_Byte == comp_Byte == 0){
-        if(i == Lastdiscrepans){search_di =1; }
-        else if (i>Lastdiscrepans) {
-        search_di = 0;
-        }else {
-        
+if(*LastDeviceFlag == 1){
+    write_byte(0xF0);
+    for(int i =0;i<64;i++){
+        read(&id_Byte);
+        read(&comp_Byte);
+        if(id_Byte == comp_Byte == 1) return -1;
+        if(id_Byte == comp_Byte == 0){
+            if(i == *Lastdiscrepans){
+                search_di =1; 
+            }
+            else if (i>*Lastdiscrepans) {
+            search_di = 0;
+            }else {
+            
+            ROM_NUM[i] = search_di;
+            }
+            write_byte(search_di);
+            if (search_di== 0) {
+            last_zero = i;
+            if (last_zero < 9){LastFamdiscrepan = last_zero;};
+            }
+        }
+        search_di = id_Byte;
         ROM_NUM[i] = search_di;
-        }
-        if (search_di== 0) {
-        last_zero = i;
-        if (last_zero < 9)LastFamdiscrepan = last_zero;
-        }
+
+        
     }
-    search_di = id_Byte;
-    ROM_NUM[i] = search_di;
+    if (Lastdiscrepans == 0) {
 
-    
+    }else {
+    *LastDeviceFlag = 1;
+    }
 }
-if (Lastdiscrepans == 0) {
-
-}else {
-LastDeviceFlag =1;
-}
-
 if(crc_pruefen(ROM_NUM,8) == 1){
 return 1;
 
