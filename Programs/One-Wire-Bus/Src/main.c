@@ -22,6 +22,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "fehler.h"
+#include <string.h>
 
 
 
@@ -35,10 +36,8 @@ int main(void) {
    
 	                 // Initialisierung des LCD Boards mit Touch
     uint8_t rom[8];
-	uint8_t ROM_NUM_1[8] ;
-	uint8_t ROM_NUM_2[8] ;
-	uint8_t ROM_NUM_3[8] ;
-	uint8_t ROM_NUM_4[8] ;
+	uint8_t ROM_NUM[4][8] ;
+	
 
     uint8_t romCommand = 0x33;
 
@@ -48,62 +47,11 @@ int main(void) {
     char serial[16];
     char fam[16]; 
     float oldtem  = 0;
-    uint8_t ROM_NUM[8];
     uint8_t Lastdiscrepans = 0;
     uint8_t LastDeviceFlag = 0;
 
-/*
-  // Begruessungstext	
-	fehler = reset();;
 	
-	    // ROM Command
-    write_byte(romCommand);
-
-    // ROM lesen
-    if (rom_read(rom) != WORKING)
-    {
-        lcdPrintS("Read Error\n");
-        while (1);
-    }
-
-    // CRC prüfen
-    if (crc_pruefen(rom, 8) != WORKING)
-    {
-        lcdPrintS("CRC FAIL\n");
-    }
-    else
-    {
-        lcdPrintS("CRC OK\n");
-    }
-
-    // Ausgabe
-
-    
-
-    snprintf(fam, sizeof(fam), "Fam: %u", rom[0]);
-    lcdPrintS(fam);
-    lcdPrintS("\n");
-
-    lcdPrintS("Serial: ");
-    for (int i = 1; i < 7; i++)
-    {
-        snprintf(serial, sizeof(serial), "%u ", rom[i]);
-        lcdPrintS(serial);
-    
-	}
-	snprintf(str, sizeof(str), "CRC: %u", rom[7]);
-    lcdPrintS(str);
-    lcdPrintS("\n");
-
-
-	uint64_t sensor_rom = 0;
-    for (int i = 0; i < 8; i++) {
-        sensor_rom |= ((uint64_t)rom[i] << (i * 8));
-    }
-
-	*/
-	
-     
+     /*
 	int s = OW_searcht(ROM_NUM_1, &LastDeviceFlag, &Lastdiscrepans);
     snprintf(fam, sizeof(fam), "Fam: %u", ROM_NUM_1[0]);
     lcdPrintS(fam);
@@ -117,10 +65,12 @@ int main(void) {
     
 	}
 	snprintf(str, sizeof(str), "CRC: %u", ROM_NUM_1[7]);
+    
     lcdPrintS(str);
     lcdPrintS("\n");
     int p = OW_searcht(ROM_NUM_1, &LastDeviceFlag, &Lastdiscrepans);
 	
+    lcdGotoXY(5, 8);
     snprintf(fam, sizeof(fam), "Fam: %u", ROM_NUM_1[0]);
     lcdPrintS(fam);
     lcdPrintS("\n");
@@ -136,27 +86,63 @@ int main(void) {
     lcdPrintS(str);
     lcdPrintS("\n");
 
+*/
+int SenDa=0;
+ OWFirst( Lastdiscrepans,  LastDeviceFlag);
+ OW_searcht(rom, &LastDeviceFlag, &Lastdiscrepans);
+ memcpy(ROM_NUM[0],rom,8);
+for(int i = 1; i < 4;i++){
+    
+SenDa = OW_searcht(rom, &LastDeviceFlag, &Lastdiscrepans);
+memcpy(ROM_NUM[i],rom,8);
+}
+
+
+
+float temperatur[4] ;
+
 
 	//Test in Endlosschleife😮🥺
 	while(1) {
-		float temperatur = 0.0f;
         
-	if(temperatur_lesen(rom, &temperatur) != WORKING){
-		            lcdPrintS("Mess Fehler!\n");
-	} else {
-		snprintf(str, sizeof(str), "tmp: %f", temperatur);
-        
-        if(temperatur != oldtem){
-             lcdGotoXY(5, 5);
-            lcdPrintReplS(str);
+
+        for(int i = 0; i < 4;i++){
+    
+            if(temperatur_lesen(ROM_NUM[i], & temperatur[i]) != WORKING){
+                            lcdPrintS("Mess Fehler!\n");
+                } 
         }
-        
-	} 
-	impulsDelay(1000000 * 90);
-    float oldtem =temperatur;
+                    
+                    
+                    snprintf(str, sizeof(str), "tmp0: %f", temperatur[0]);
+                    
+                    
+                        lcdGotoXY(5, 5);
+                        lcdPrintReplS(str);
+                    
+                    snprintf(str, sizeof(str), "tmp1: %f", temperatur[1]);
+                    
+                        lcdGotoXY(5, 6);
+                        lcdPrintReplS(str);
+                    
+                    snprintf(str, sizeof(str), "tmp2: %f", temperatur[2]);
+                   
+                        lcdGotoXY(5, 7);
+                        lcdPrintReplS(str);
+                    
+                    snprintf(str, sizeof(str), "tmp3: %f", temperatur[3]);
+                    
+                        lcdGotoXY(5, 8);
+                        lcdPrintReplS(str);
+                    
+         impulsDelay(1000000 * 90);
+             
+    } 
+            
+	
 	
 		
-	}
+	
 }
 
 

@@ -310,7 +310,7 @@ int OW_searcht(uint8_t *ROM_NO,uint8_t *LastDeviceFlag,uint8_t *LastDiscrepancy)
     return -1;
 
  }
-    if(LastDeviceFlag == 1){
+    if(*LastDeviceFlag == 1){
         return -2;
     }
     write_byte(0xF0);
@@ -326,12 +326,12 @@ int OW_searcht(uint8_t *ROM_NO,uint8_t *LastDeviceFlag,uint8_t *LastDiscrepancy)
                 search_direction = id_bit;
             } else {
                 // Diskrepanz auflösen
-                if (id_bit_number < LastDiscrepancy) {
+                if (id_bit_number < *LastDiscrepancy) {
                     // Pfad aus dem vorherigen ROM-Eintrag übernehmen
                     search_direction = ((ROM_NO[rom_byte_number] & rom_byte_mask) > 0);
                 } else {
                     // Wenn gleich, diesmal 1 wählen, ansonsten die standardmäßige 0
-                    search_direction = (id_bit_number == LastDiscrepancy);
+                    search_direction = (id_bit_number == *LastDiscrepancy);
                 }
 
                 // Wenn der 0-Pfad gewählt wurde, Position merken
@@ -373,7 +373,7 @@ int OW_searcht(uint8_t *ROM_NO,uint8_t *LastDeviceFlag,uint8_t *LastDiscrepancy)
 return 1;
 
 }
-int OWFirst(int LastDiscrepancy,int LastDeviceFlag){
+int OWFirst(uint8_t LastDiscrepancy, uint8_t LastDeviceFlag){
         LastDiscrepancy = 0;
         LastDeviceFlag = 0;
 
