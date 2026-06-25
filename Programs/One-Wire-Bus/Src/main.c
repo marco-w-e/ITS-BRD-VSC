@@ -116,7 +116,6 @@ float temperatur[4] ;
                     
                     snprintf(str, sizeof(str), "tmp0: %f", temperatur[0]);
                     
-                    
                         lcdGotoXY(5, 5);
                         lcdPrintReplS(str);
                     
@@ -135,7 +134,7 @@ float temperatur[4] ;
                         lcdGotoXY(5, 8);
                         lcdPrintReplS(str);
                     
-         impulsDelay(1000000 * 90);
+         impulsDelay(10000 * 90);
              
     } 
             
