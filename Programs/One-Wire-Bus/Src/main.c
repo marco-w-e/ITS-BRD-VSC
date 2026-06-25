@@ -48,20 +48,20 @@ int main(void) {
 
     int da = OW_searcht(rom, &LastDeviceFlag, &Lastdiscrepans);
 
-    if(da != WORKING){
+    if(da == -2){
         break;
     }
-    memcpy(ROM_NUM[0], rom, 8);
+    memcpy(ROM_NUM[sensorCount], rom, 8);
     sensorCount++;
   
   }
-  
+  /*
   for (int i = 1; i < 4; i++) {
 
     SenDa = OW_searcht(rom, &LastDeviceFlag, &Lastdiscrepans);
     memcpy(ROM_NUM[i], rom, 8);
   }
-
+*/
   for (int i = 0; i < 5; i++) {
 
     if (ROM_NUM[i][1] != 0) {
@@ -96,7 +96,7 @@ int main(void) {
 
     for (int i = 0; i < sensorCount; i++) {
       if (temperatur_lesen(ROM_NUM[i], &temperatur[i]) != WORKING) {
-        
+        lcdGotoXY(0, i);
         lcdPrintS("Mess Fehler!\n");
       }
 
