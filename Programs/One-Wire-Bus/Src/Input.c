@@ -366,7 +366,7 @@ int OW_searcht(uint8_t *ROM_NO,uint8_t *LastDeviceFlag,uint8_t *LastDiscrepancy)
     
     *LastDiscrepancy = last_zero;
     }
-    if (LastDiscrepancy == 0) {
+    if (*LastDiscrepancy == 0) {
             *LastDeviceFlag = 1;
         }
 
