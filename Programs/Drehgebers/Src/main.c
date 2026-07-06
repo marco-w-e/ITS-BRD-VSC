@@ -29,6 +29,7 @@
 #include "timer.h" // Dein Timer-Modul
 #include <stdbool.h>
 #include <stdio.h>
+#include "interrupt.h"
 
 
 #define TICKS_PER_US 90

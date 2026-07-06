@@ -189,6 +189,7 @@ project:
         - file: Inc/output.h
         - file: Inc/rechner.h
         - file: Inc/fsm.h
+        - file: Inc/interrupt.h
 
     # Benutzerdefinierte Programmdateien
     - group: Program/User/Src
@@ -199,6 +200,7 @@ project:
         - file: Src/output.c
         - file: Src/rechner.c
         - file: Src/fsm.c
+        - file: Src/interrupt.c
 
   components:
     - component: ARM::CMSIS:CORE
