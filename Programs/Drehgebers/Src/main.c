@@ -91,7 +91,7 @@ int main(void) {
     }
 
     /* 2. LED-Visu & Fehlerbehandlung */
-    if (currentPhaseCount != lastProcessedPhases || currentDirCopy == ERRO) {
+   
 
       if (currentDirCopy == FORWARD) {
         setLED(PIN_LED23);
@@ -125,7 +125,7 @@ int main(void) {
         }
       }
       lastProcessedPhases = currentPhaseCount;
-    }
+    
 
     degreePrint();
   }

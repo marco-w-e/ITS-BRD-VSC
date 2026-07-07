@@ -16,7 +16,7 @@
 
 // Definition der globalen Variablen
 volatile int amountPhases = 0;
-volatile Direction direction = IDLE;
+volatile Direction direction = ERRO;
 volatile int phase = 0;
 volatile int oldPhase = 0;
 
