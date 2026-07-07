@@ -18,6 +18,6 @@
 #include "fehler.h"
 #include "lcd.h"
 
-int gpioAusLesen() { return GPIOF->IDR & (0x03U); }
+int gpioAusLesen() { return GPIOG->IDR & (0x03U); }
 
-bool inputS6(void) { return !(GPIOF->IDR & (1 << 6)); }
+bool inputS6(void) { return !(GPIOG->IDR & (1 << 6)); }

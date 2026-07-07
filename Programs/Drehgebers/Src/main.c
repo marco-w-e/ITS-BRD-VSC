@@ -43,28 +43,28 @@ int main(void) {
   GUI_init(DEFAULT_BRIGHTNESS);
   TP_Init(false);
   layout();
-
+  initInterrupt();
   /* Variablen-Initialisierung (Pflicht laut Guide) */
-  uint32_t start = TIM2->CNT;
-  uint32_t now;
-  uint32_t window;
-  int phase;
-  int oldPhase = gpioAusLesen();
-  int amountPhases = 0;
-  int oldAmountPhases = 0;
-  Direction currentDirection = IDLE;
+  //uint32_t start = TIM2->CNT;
+  //uint32_t now;
+  //uint32_t window;
+ // int phase;
+  //int oldPhase = 0;
+  //int amountPhases = 0;
+ // int oldAmountPhases = 0; 
+  //Direction currentDirection = IDLE;
   double winkel = 0.0;
   double oldWinkel = 0.0;
   double geschwindigkeit = 0.0;
 
   while (1) {
     
-    /* Aktuelle Zeit und Geberzustand erfassen */
+    /* Aktuelle Zeit und Geberzustand erfassen 
     phase = gpioAusLesen();
     now = getTimeStamp();
     window = now - start;
     
-    /* Zyklische Berechnung von Winkel und Geschwindigkeit */
+    /* Zyklische Berechnung von Winkel und Geschwindigkeit 
      if ((window >= T250MS && phase != oldPhase) || (window >= T500MS)) {
       winkel = degree(amountPhases);
       geschwindigkeit = speed(amountPhases, oldAmountPhases, window);
@@ -74,9 +74,10 @@ int main(void) {
       oldWinkel = winkel;
       oldAmountPhases = amountPhases;
       start = now;
-    }
+    }*/
     
     /* Auswertung der Drehrichtung bei Flankenwechsel */
+    
     if (phase != oldPhase) {
       getDirection(oldPhase, phase, &currentDirection);
 

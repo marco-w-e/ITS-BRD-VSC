@@ -17,8 +17,14 @@
 #include <stdint.h>
 #include "timer.h" // Dein Timer-Modul
 
-volatile uint32_t phasenCount = 0;
-volatile uint32_t lastTime = 0;
+extern volatile int amountPhases = 0;
+extern volatile Direction currentDirection = IDLE;
+extern volatile int phase = 0;
+extern volatile int oldPhase = 0;
+extern volatile int now = 0;
+extern volatile int oldTime =0;
+extern volatile int window;
+
 /* Configure EXTI2 (Pin PG2) for encoder interrupt */
 void initInterrupt(void)
 {
@@ -26,39 +32,62 @@ void initInterrupt(void)
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOGEN; /* Clock for GPIO Port G */
 	RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN; /* System configuration clock enable */
 
+	GPIOG->MODER &= ~(GPIO_MODER_MODER0 | GPIO_MODER_MODER1);
+    
+	SYSCFG->EXTICR[0] &= ~(0x0f << (4*0)); /* Remove old selection */
+	SYSCFG->EXTICR[0] |= 0x06 << (4*0);   /* 0x06 : Select port G */
 
-
-    SYSCFG->EXTICR[0] &= ~(0x0f << (4*1)); /* Remove old selection */
+	/* Routing Pin 1 of Port G -> EXTI2 */
+	SYSCFG->EXTICR[0] &= ~(0x0f << (4*1)); /* Remove old selection */
 	SYSCFG->EXTICR[0] |= 0x06 << (4*1);   /* 0x06 : Select port G */
-
-	/* Routing Pin 2 of Port G -> EXTI2 */
-	SYSCFG->EXTICR[0] &= ~(0x0f << (4*2)); /* Remove old selection */
-	SYSCFG->EXTICR[0] |= 0x06 << (4*2);   /* 0x06 : Select port G */
 
 
 	/* Trigger and mask */
 	/* EXTI->RTSR |= (1<<2); */ /* select rising trigger for INT2 if needed */
-	EXTI->RTSR |= (1<<1); //select rising trigger for INT1
-    EXTI->FTSR |= (1<<1); //select falling trigger for INT1
-    
-    EXTI->IMR |= (1<<1);   /* Unmask INT1 */
-    
-    EXTI->RTSR |= (1<<2); //select rising trigger for INT2
-    EXTI->FTSR |= (1<<2); //select falling trigger for INT2
-  
-	EXTI->IMR |= (1<<2);   /* Unmask INT2 */
+	EXTI->RTSR |= (1 << 0) | (1 << 1); /* Rising Trigger für EXTI0 & EXTI1 */
+    EXTI->FTSR |= (1 << 0) | (1 << 1); /* Falling Trigger für EXTI0 & EXTI1 */
+    EXTI->IMR  |= (1 << 0) | (1 << 1); /* Interrupt-Maske öffnen für beide */
 
-    NVIC_SetPriority(EXTI1_IRQn, 1); /* Setup EXTI2 priority */
-	NVIC_EnableIRQ(EXTI1_IRQn); /* Enable EXTI2 */
+    NVIC_SetPriority(EXTI0_IRQn, 1); /* Setup EXTI2 priority */
+	NVIC_EnableIRQ(EXTI0_IRQn); /* Enable EXTI2 */
     
-	NVIC_SetPriority(EXTI2_IRQn, 1); /* Setup EXTI2 priority */
-	NVIC_EnableIRQ(EXTI2_IRQn); /* Enable EXTI2 */
+	NVIC_SetPriority(EXTI1_IRQn, 1); /* Setup EXTI2 priority */
+	NVIC_EnableIRQ(EXTI1_IRQn); /* Enable EXTI2 */
 }
 
-void EXTI1_IRQHandler(void){
- uint32_t now = getTimeStamp();
-uint32_t phase = gpioAusLesen();
- EXTI -> PR = (1 << 2);
+// ISR für EXTI1 (Pin G1 / Spur A)
+void EXTI1_IRQHandler(void) {
+    if (EXTI->PR & (1 << 1)) { // Prüfen, ob EXTI1 ausgelöst hat
+        EXTI->PR = (1 << 1);   // Pending-Bit löschen!
+        uint32_t now = getTimeStamp();
+		window = now - oldTime;
+		oldTime = now;
+        phase = gpioAusLesen();    // Aktuellen Zustand (Spur A und B) einlesen
+        if (phase != oldPhase) {
+            getDirection(oldPhase, phase, (Direction*)&currentDirection);
+            if (currentDirection == FORWARD)  amountPhases++;
+            if (currentDirection == BACKWARD) amountPhases--;
+            
+        }
+    }
+}
 
-    
+// ISR für EXTI2 (Pin G2 / Spur B)
+void EXTI2_IRQHandler(void) {
+    if (EXTI->PR & (1 << 2)) { // Prüfen, ob EXTI2 ausgelöst hat
+        EXTI->PR = (1 << 2);   // Pending-Bit löschen!
+        uint32_t now = getTimeStamp();
+		window = now - oldTime;
+		oldTime = now;
+        phase = gpioAusLesen();
+        if (phase != oldPhase) {
+            getDirection(oldPhase, phase, (Direction*)&currentDirection);
+            if (currentDirection == FORWARD)  amountPhases++;
+            if (currentDirection == BACKWARD) amountPhases--;
+            
+        }
+    }
+}
+int getPhase(void){
+	return phase;
 }
