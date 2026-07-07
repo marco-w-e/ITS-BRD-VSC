@@ -1,19 +1,10 @@
 /**
  ******************************************************************************
- * @note    Aufgabe 2 - Drehgeber
+ * @note    Aufgabe 5 - Drehgeber per Interrupt
  * @file    main.c
- * @author  Dylan Dagomber 2815132, Marco Weidner
- * @date    03.05.2026
- * @brief   Hauptprogramm zur Drehgeberauswertung auf dem STM32F4.
- *          Liest zyklisch die Phasensignale des Drehgebers ein, bestimmt
- *          Drehrichtung und Phasenzähler per FSM, berechnet in einem
- *          250 ms / 500 ms Zeitfenster Winkel und Geschwindigkeit und gibt
- *          diese zeichenweise auf dem LCD aus. Fehlerhafte Phasenübergänge
- *          werden per LED signalisiert und per Taster S6 zurückgesetzt.
  ******************************************************************************
  */
 /* Includes ------------------------------------------------------------------*/
-
 #include "LCD_GUI.h"
 #include "LCD_Touch.h"
 #include "additionalFonts.h"
@@ -22,19 +13,24 @@
 #include "fsm.h"
 #include "init.h"
 #include "input.h"
+#include "interrupt.h"
 #include "lcd.h"
 #include "output.h"
 #include "rechner.h"
 #include "stm32f4xx_hal.h"
-#include "timer.h" // Dein Timer-Modul
+#include "timer.h"
 #include <stdbool.h>
 #include <stdio.h>
-#include "interrupt.h"
 
 
 #define TICKS_PER_US 90
 #define T250MS (250000 * TICKS_PER_US)
 #define T500MS (500000 * TICKS_PER_US)
+
+// Zugriff auf die externen volatilen Variablen aus interrupt.c für Reset
+extern volatile int amountPhases;
+extern volatile Direction currentDirection;
+extern volatile uint32_t timestampPhases;
 
 int main(void) {
   /* Hardware und Peripherie initialisieren */
@@ -44,73 +40,93 @@ int main(void) {
   TP_Init(false);
   layout();
   initInterrupt();
-  /* Variablen-Initialisierung (Pflicht laut Guide) */
-  //uint32_t start = TIM2->CNT;
-  //uint32_t now;
-  //uint32_t window;
- // int phase;
-  //int oldPhase = 0;
-  //int amountPhases = 0;
- // int oldAmountPhases = 0; 
-  //Direction currentDirection = IDLE;
+
+  /* Variablen für die zyklische LCD-Berechnung */
+  uint32_t startLoop = getTimeStamp();
+  uint32_t lastDisplayTimestamp = startLoop;
+
+  int lastProcessedPhases = 0;
+  int oldAmountPhases = 0;
   double winkel = 0.0;
   double oldWinkel = 0.0;
   double geschwindigkeit = 0.0;
 
   while (1) {
-    
-    /* Aktuelle Zeit und Geberzustand erfassen 
-    phase = gpioAusLesen();
-    now = getTimeStamp();
-    window = now - start;
-    
-    /* Zyklische Berechnung von Winkel und Geschwindigkeit 
-     if ((window >= T250MS && phase != oldPhase) || (window >= T500MS)) {
-      winkel = degree(amountPhases);
-      geschwindigkeit = speed(amountPhases, oldAmountPhases, window);
-      degreeToString(winkel);
-      speedToString(geschwindigkeit); 
-      
-      oldWinkel = winkel;
-      oldAmountPhases = amountPhases;
-      start = now;
-    }*/
-    
-    /* Auswertung der Drehrichtung bei Flankenwechsel */
-    
-    if (phase != oldPhase) {
-      getDirection(oldPhase, phase, &currentDirection);
+    int currentPhasesCopy;
+    uint32_t currentTimestampCopy;
 
-      if (currentDirection == FORWARD) {
-        amountPhases++;
-        setLED(PIN_LED23); // Vorwärtsanzeige
-        clearLED(PIN_LED22);
-        clearLED(PIN_LED21);
-        setLEDBinary(amountPhases);
-      } else if (currentDirection == BACKWARD) {
-        amountPhases--;
-        setLED(PIN_LED22); // Rückwärtsanzeige
-        clearLED(PIN_LED23);
-        clearLED(PIN_LED21);
-        setLEDBinary(amountPhases);
+    // 1. Sicheres und konsistentes Auslesen aus den ISR-Variablen
+    getEncoderDataSafe(&currentPhasesCopy, &currentTimestampCopy);
+    Direction currentDirCopy = currentDirection;
+
+    uint32_t loopNow = getTimeStamp();
+
+    /* Zyklische LCD-Ausgabe alle 250ms (bei Änderung) oder spätestens nach
+     * 500ms */
+    if (((loopNow - lastDisplayTimestamp) >= T250MS &&
+         currentPhasesCopy != oldAmountPhases) ||
+        ((loopNow - lastDisplayTimestamp) >= T500MS)) {
+
+      winkel = degree(currentPhasesCopy);
+
+      // Berechnung basierend auf der Zeitdifferenz der tatsächlichen
+      // ISR-Flanken
+      uint32_t speedWindow = currentTimestampCopy - lastDisplayTimestamp;
+
+      // Absicherung falls im Zeitfenster kein neuer Interrupt kam (speedWindow
+      // == 0)
+      if (currentPhasesCopy == oldAmountPhases || speedWindow == 0) {
+        geschwindigkeit = 0.0;
+      } else {
+        geschwindigkeit =
+            speed(currentPhasesCopy, oldAmountPhases, speedWindow);
       }
-        else if (currentDirection == ERRO) {
-        /* Fehlerbehandlung: Blockieren bis Reset durch S6 */
-        setLED(PIN_LED21); // Fehler-LED
+
+      degreeToString(winkel);
+      speedToString(geschwindigkeit);
+
+      oldWinkel = winkel;
+      oldAmountPhases = currentPhasesCopy;
+      lastDisplayTimestamp = loopNow; // Auffrischen für den Display-Zyklus
+    }
+
+    /* 2. LED-Visu & Fehlerbehandlung */
+    if (currentPhasesCopy != lastProcessedPhases || currentDirCopy == ERRO) {
+
+      if (currentDirCopy == FORWARD) {
+        setLED(PIN_LED23);
+        clearLED(PIN_LED22);
+        clearLED(PIN_LED21);
+        setLEDBinary(currentPhasesCopy);
+      } else if (currentDirCopy == BACKWARD) {
+        setLED(PIN_LED22);
+        clearLED(PIN_LED23);
+        clearLED(PIN_LED21);
+        setLEDBinary(currentPhasesCopy);
+      } else if (currentDirCopy == ERRO) {
+        setLED(PIN_LED21);
         clearLED(PIN_LED23);
         clearLED(PIN_LED22);
-        setLEDBinary(amountPhases);
+        setLEDBinary(currentPhasesCopy);
+
         bool errorActive = true;
         while (errorActive) {
           if (inputS6()) {
-            reset(&amountPhases, &oldAmountPhases, &currentDirection, &winkel,
-                  &oldWinkel, &geschwindigkeit);
+            // Reset übergeben (Casting der globalen ISR-Variablen)
+            reset((int *)&amountPhases, &oldAmountPhases,
+                  (Direction *)&currentDirection, &winkel, &oldWinkel,
+                  &geschwindigkeit);
+
+            // Auch den Interrupt-Zeitstempel zurücksetzen
+            timestampPhases = getTimeStamp();
+            currentPhasesCopy = 0;
             errorActive = false;
           }
         }
       }
-      oldPhase = phase;
+      lastProcessedPhases = currentPhasesCopy;
     }
-    degreePrint(); // LCD-Ausgabe aktualisieren
+
+    degreePrint();
   }
 }

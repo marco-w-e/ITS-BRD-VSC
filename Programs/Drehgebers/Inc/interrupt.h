@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+// Deklarationen der Variablen für andere Module (ohne Werte-Zuweisung!)
 extern volatile int amountPhases;
 extern volatile Direction currentDirection;
 extern volatile int phase;
@@ -15,9 +16,9 @@ extern volatile int window;
 
 void initInterrupt(void);
 
-void EXTI1_IRQHandler(void); // Deklaration ISR
-void EXTI2_IRQHandler(void); // Deklaration ISR
+void EXTI0_IRQHandler(void); // Passend zu Pin 0
+void EXTI1_IRQHandler(void); // Passend zu Pin 1
 int getPhase(void);
+void getEncoderDataSafe(int *outPhases, uint32_t *outTimestamp);
 
 #endif
-// EOF

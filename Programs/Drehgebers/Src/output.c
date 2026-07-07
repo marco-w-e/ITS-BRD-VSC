@@ -33,9 +33,9 @@ int setLEDBinary(int phase) {
 
   /* Zuerst alle 8 LEDs löschen */
   GPIOD->BSRR = (0xFF << 16);
-  
+
   /* Neue Bitmaske setzen */
   GPIOD->BSRR = bits;
-  
+
   return WORKING;
 }
