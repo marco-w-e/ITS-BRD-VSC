@@ -16,12 +16,12 @@
 
 // Definition der globalen Variablen
 volatile int amountPhases = 0;
-volatile Direction currentDirection = IDLE;
+volatile Direction direction = IDLE;
 volatile int phase = 0;
 volatile int oldPhase = 0;
 
 // NEU: Zeitstempel des letzten gültigen Phasenwechsels
-volatile uint32_t timestampPhases = 0;
+volatile uint32_t lastPhaseChangeTime = 0;
 
 void initInterrupt(void)
 {
@@ -54,25 +54,25 @@ void initInterrupt(void)
     
     // Startphase einmalig einlesen
     oldPhase = gpioAusLesen();
-    timestampPhases = getTimeStamp();
+    lastPhaseChangeTime = getTimeStamp();
 }
 
 // ISR für EXTI0 (Pin G0 / Spur A)
 void EXTI0_IRQHandler(void) {
     // 1. Zeitstempel SOFORT holen (Vorgabe PDF)
-    uint32_t t_capture = getTimeStamp();
+    uint32_t interruptTime = getTimeStamp();
 
     if (EXTI->PR & (1 << 0)) { 
         EXTI->PR = (1 << 0);   
         
         phase = gpioAusLesen();    
         if (phase != oldPhase) {
-            getDirection(oldPhase, phase, (Direction*)&currentDirection);
-            if (currentDirection == FORWARD)  amountPhases++;
-            if (currentDirection == BACKWARD) amountPhases--;
+            getDirection(oldPhase, phase, (Direction*)&direction);
+            if (direction == FORWARD)  amountPhases++;
+            if (direction == BACKWARD) amountPhases--;
             
             // Nur bei echtem Wechsel den globalen Zeitstempel aktualisieren
-            timestampPhases = t_capture;
+            lastPhaseChangeTime = interruptTime;
             oldPhase = phase; 
         }
     }
@@ -81,19 +81,19 @@ void EXTI0_IRQHandler(void) {
 // ISR für EXTI1 (Pin G1 / Spur B)
 void EXTI1_IRQHandler(void) {
     // 1. Zeitstempel SOFORT holen (Vorgabe PDF)
-    uint32_t t_capture = getTimeStamp();
+    uint32_t interruptTime = getTimeStamp();
 
     if (EXTI->PR & (1 << 1)) { 
         EXTI->PR = (1 << 1);   
         
         phase = gpioAusLesen();
         if (phase != oldPhase) {
-            getDirection(oldPhase, phase, (Direction*)&currentDirection);
-            if (currentDirection == FORWARD)  amountPhases++;
-            if (currentDirection == BACKWARD) amountPhases--;
+            getDirection(oldPhase, phase, (Direction*)&direction);
+            if (direction == FORWARD)  amountPhases++;
+            if (direction == BACKWARD) amountPhases--;
             
             // Nur bei echtem Wechsel den globalen Zeitstempel aktualisieren
-            timestampPhases = t_capture;
+            lastPhaseChangeTime = interruptTime;
             oldPhase = phase; 
         }
     }
@@ -103,20 +103,20 @@ void EXTI1_IRQHandler(void) {
  * 
  * Verhindert Race Conditions, falls mitten im Lesevorgang ein Interrupt auftritt.
  */
-void getEncoderDataSafe(int *outPhases, uint32_t *outTimestamp) {
-    int t_phases1, t_phases2;
-    uint32_t t_time1, t_time2;
+void readEncoderData(int *outPhases, uint32_t *timestamp) {
+    int phaseWert1, phaseWert2;
+    uint32_t timeWert1, timeWert2;
 
     do {
-        t_time1   = timestampPhases;
-        t_phases1 = amountPhases;
+        timeWert1   = lastPhaseChangeTime;
+        phaseWert1 = amountPhases;
 
-        t_time2   = timestampPhases;
-        t_phases2 = amountPhases;
-    } while ((t_time1 != t_time2) || (t_phases1 != t_phases2));
+        timeWert2   = lastPhaseChangeTime;
+        phaseWert2 = amountPhases;
+    } while ((timeWert1 != timeWert2) || (phaseWert1 != phaseWert2));
 
-    *outPhases = t_phases1;
-    *outTimestamp = t_time1;
+    *outPhases = phaseWert1;
+    *timestamp = timeWert1;
 }
 
 int getPhase(void){

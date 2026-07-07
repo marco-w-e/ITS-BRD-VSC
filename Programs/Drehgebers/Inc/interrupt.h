@@ -19,6 +19,6 @@ void initInterrupt(void);
 void EXTI0_IRQHandler(void); // Passend zu Pin 0
 void EXTI1_IRQHandler(void); // Passend zu Pin 1
 int getPhase(void);
-void getEncoderDataSafe(int *outPhases, uint32_t *outTimestamp);
+void readEncoderData(int *outPhases, uint32_t *outTimestamp);
 
 #endif

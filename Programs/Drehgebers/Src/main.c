@@ -29,7 +29,7 @@
 
 // Zugriff auf die externen volatilen Variablen aus interrupt.c für Reset
 extern volatile int amountPhases;
-extern volatile Direction currentDirection;
+extern volatile Direction direction;
 extern volatile uint32_t timestampPhases;
 
 int main(void) {
@@ -42,8 +42,8 @@ int main(void) {
   initInterrupt();
 
   /* Variablen für die zyklische LCD-Berechnung */
-  uint32_t startLoop = getTimeStamp();
-  uint32_t lastDisplayTimestamp = startLoop;
+  uint32_t startTime = getTimeStamp();
+  uint32_t lastDisplayTimestamp = startTime;
 
   int lastProcessedPhases = 0;
   int oldAmountPhases = 0;
@@ -52,79 +52,79 @@ int main(void) {
   double geschwindigkeit = 0.0;
 
   while (1) {
-    int currentPhasesCopy;
-    uint32_t currentTimestampCopy;
+    int currentPhaseCount;
+    uint32_t currentPhaseTime;
 
     // 1. Sicheres und konsistentes Auslesen aus den ISR-Variablen
-    getEncoderDataSafe(&currentPhasesCopy, &currentTimestampCopy);
-    Direction currentDirCopy = currentDirection;
+    readEncoderData(&currentPhaseCount, &currentPhaseTime);
+    Direction currentDirCopy = direction;
 
-    uint32_t loopNow = getTimeStamp();
+    uint32_t currentTime = getTimeStamp();
 
     /* Zyklische LCD-Ausgabe alle 250ms (bei Änderung) oder spätestens nach
      * 500ms */
-    if (((loopNow - lastDisplayTimestamp) >= T250MS &&
-         currentPhasesCopy != oldAmountPhases) ||
-        ((loopNow - lastDisplayTimestamp) >= T500MS)) {
+    if (((currentTime - lastDisplayTimestamp) >= T250MS &&
+         currentPhaseCount != oldAmountPhases) ||
+        ((currentTime - lastDisplayTimestamp) >= T500MS)) {
 
-      winkel = degree(currentPhasesCopy);
+      winkel = degree(currentPhaseCount);
 
       // Berechnung basierend auf der Zeitdifferenz der tatsächlichen
       // ISR-Flanken
-      uint32_t speedWindow = currentTimestampCopy - lastDisplayTimestamp;
+      uint32_t timeDifference = currentPhaseTime - lastDisplayTimestamp;
 
-      // Absicherung falls im Zeitfenster kein neuer Interrupt kam (speedWindow
+      // Absicherung falls im Zeitfenster kein neuer Interrupt kam (timeDifference
       // == 0)
-      if (currentPhasesCopy == oldAmountPhases || speedWindow == 0) {
+      if (currentPhaseCount == oldAmountPhases || timeDifference == 0) {
         geschwindigkeit = 0.0;
       } else {
         geschwindigkeit =
-            speed(currentPhasesCopy, oldAmountPhases, speedWindow);
+            speed(currentPhaseCount, oldAmountPhases, timeDifference);
       }
 
       degreeToString(winkel);
       speedToString(geschwindigkeit);
 
       oldWinkel = winkel;
-      oldAmountPhases = currentPhasesCopy;
-      lastDisplayTimestamp = loopNow; // Auffrischen für den Display-Zyklus
+      oldAmountPhases = currentPhaseCount;
+      lastDisplayTimestamp = currentTime; // Auffrischen für den Display-Zyklus
     }
 
     /* 2. LED-Visu & Fehlerbehandlung */
-    if (currentPhasesCopy != lastProcessedPhases || currentDirCopy == ERRO) {
+    if (currentPhaseCount != lastProcessedPhases || currentDirCopy == ERRO) {
 
       if (currentDirCopy == FORWARD) {
         setLED(PIN_LED23);
         clearLED(PIN_LED22);
         clearLED(PIN_LED21);
-        setLEDBinary(currentPhasesCopy);
+        setLEDBinary(currentPhaseCount);
       } else if (currentDirCopy == BACKWARD) {
         setLED(PIN_LED22);
         clearLED(PIN_LED23);
         clearLED(PIN_LED21);
-        setLEDBinary(currentPhasesCopy);
+        setLEDBinary(currentPhaseCount);
       } else if (currentDirCopy == ERRO) {
         setLED(PIN_LED21);
         clearLED(PIN_LED23);
         clearLED(PIN_LED22);
-        setLEDBinary(currentPhasesCopy);
+        setLEDBinary(currentPhaseCount);
 
-        bool errorActive = true;
-        while (errorActive) {
+        bool hasError = true;
+        while (hasError) {
           if (inputS6()) {
             // Reset übergeben (Casting der globalen ISR-Variablen)
             reset((int *)&amountPhases, &oldAmountPhases,
-                  (Direction *)&currentDirection, &winkel, &oldWinkel,
+                  (Direction *)&direction, &winkel, &oldWinkel,
                   &geschwindigkeit);
 
             // Auch den Interrupt-Zeitstempel zurücksetzen
             timestampPhases = getTimeStamp();
-            currentPhasesCopy = 0;
-            errorActive = false;
+            currentPhaseCount = 0;
+            hasError = false;
           }
         }
       }
-      lastProcessedPhases = currentPhasesCopy;
+      lastProcessedPhases = currentPhaseCount;
     }
 
     degreePrint();
