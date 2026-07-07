@@ -30,7 +30,7 @@
 // Zugriff auf die externen volatilen Variablen aus interrupt.c für Reset
 extern volatile int amountPhases;
 extern volatile Direction direction;
-extern volatile uint32_t timestampPhases;
+extern volatile uint32_t lastPhaseChangeTime ;
 
 int main(void) {
   /* Hardware und Peripherie initialisieren */
@@ -118,7 +118,7 @@ int main(void) {
                   &geschwindigkeit);
 
             // Auch den Interrupt-Zeitstempel zurücksetzen
-            timestampPhases = getTimeStamp();
+            lastPhaseChangeTime  = getTimeStamp();
             currentPhaseCount = 0;
             hasError = false;
           }
@@ -129,4 +129,4 @@ int main(void) {
 
     degreePrint();
   }
-}
+}  
