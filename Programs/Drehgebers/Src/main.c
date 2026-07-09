@@ -31,6 +31,7 @@
 extern volatile int amountPhases;
 extern volatile Direction direction;
 extern volatile uint32_t lastPhaseChangeTime ;
+extern volatile int now;
 
 int main(void) {
   /* Hardware und Peripherie initialisieren */
@@ -71,7 +72,7 @@ int main(void) {
 
       // Berechnung basierend auf der Zeitdifferenz der tatsächlichen
       // ISR-Flanken
-      uint32_t timeDifference = currentPhaseTime - lastDisplayTimestamp;
+      uint32_t timeDifference = now - lastDisplayTimestamp;
 
       // Absicherung falls im Zeitfenster kein neuer Interrupt kam (timeDifference
       // == 0)

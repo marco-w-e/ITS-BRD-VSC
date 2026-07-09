@@ -16,7 +16,7 @@
 
 // Definition der globalen Variablen
 volatile int amountPhases = 0;
-volatile Direction direction = ERRO;
+volatile Direction direction ;
 volatile int phase = 0;
 volatile int oldPhase = 0;
 
@@ -113,7 +113,7 @@ void readEncoderData(int *outPhases, uint32_t *timestamp) {
 
         timeWert2   = lastPhaseChangeTime;
         phaseWert2 = amountPhases;
-    } while ((timeWert1 != timeWert2) || (phaseWert1 != phaseWert2));
+    } while ((timeWert1 != timeWert2) && (phaseWert1 != phaseWert2));
 
     *outPhases = phaseWert1;
     *timestamp = timeWert1;

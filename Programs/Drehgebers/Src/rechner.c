@@ -19,6 +19,6 @@ double degree(int menge) { return menge * (360.0 / 1200.0); }
 /* Berechnet die Winkelgeschwindigkeit (Grad pro Sekunde) */
 double speed(int mengePhasen, int altMengePhasen, uint32_t zeit) {
 
-  double secWindow = (double)zeit / 180000000.0;
+  double secWindow = (double)zeit / 180000000.0;            
   return (double)(mengePhasen - altMengePhasen) * (360.0 / 1200.0) / secWindow;
 }
